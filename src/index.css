@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .scroll-app {
+     @apply overflow-auto scrollbar-thin scrollbar-thumb-rounded dark:scrollbar-thumb-neutral-600 scrollbar-thumb-neutral-400 scrollbar-track-transparent;
+  }
+}
