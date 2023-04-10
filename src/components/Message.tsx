@@ -35,7 +35,7 @@ export const Message = ({ content, date, sendedByMe, userName }: Props) => {
           ${sendedByMe ? "text-emerald-200" : "text-neutral-500"}
         `}
       >
-        {moment(date).format("DD-MM-yyyy, HH:MM")}
+        {moment(date).format("DD-MM-yyyy, HH:mm")}
       </small>
       <span
         className={`
