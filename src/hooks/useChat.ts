@@ -1,33 +1,33 @@
-import { useEffect, useState } from 'react'
-import { useSocketStore } from '../store/SocketStore'
-import { CLIENT_CHANNELS, SERVER_CHANNELS } from '../utils/constants'
-import { useChatsStore, type IChat } from '../store/ChatStore'
-import { useUserStore } from '../store/UserStore';
+import { useEffect, useState } from "react"
+import { useSocketStore } from "../store/SocketStore"
+import { CLIENT_CHANNELS, SERVER_CHANNELS } from "../utils/constants"
+import { useChatsStore, type IChat } from "../store/ChatStore"
+import { type LoggedUser } from "../components/ChatBubble"
 
 export interface IMessage {
-  id: number;
-  uid: string;
-  chatId: number;
-  userId: number;
-  message: string;
-  dateTimeSent: string;
+  id: number
+  uid: string
+  chatId: number
+  userId: number
+  message: string
+  dateTimeSent: string
+}
+interface Props {
+  loggedUser: LoggedUser | null
 }
 
-export const useChat = () => {
+export const useChat = ({ loggedUser }: Props) => {
   const { connection } = useSocketStore()
-  const { user } = useUserStore()
-  const {
-    chats,
-    setChats,
-    selectChat,
-    selectedChat,
-  } = useChatsStore()
+  const { chats, setChats, selectChat, selectedChat } = useChatsStore()
   const [messages, setMessages] = useState<IMessage[]>([])
 
   const handleSelectChat = (chat: IChat) => {
-    if (connection === null || user === null) return
+    if (connection === null || loggedUser === null) return
     selectChat(chat)
-    connection.emit(SERVER_CHANNELS['join-room'], { uidChat: chat.uid, token: user.token })
+    connection.emit(SERVER_CHANNELS["join-room"], {
+      uidChat: chat.uid,
+      token: loggedUser.token,
+    })
   }
 
   useEffect(() => {
@@ -48,6 +48,6 @@ export const useChat = () => {
     chats,
     messages,
     selectedChat,
-    handleSelectChat
+    handleSelectChat,
   }
 }

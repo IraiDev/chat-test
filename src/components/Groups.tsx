@@ -2,14 +2,18 @@ import { HiUserGroup } from "react-icons/hi"
 import { useClickOutside } from "../hooks/useClickOutside"
 import { useChat } from "../hooks/useChat"
 import { CreateGroup } from "./CreateGroup"
+import { type Options } from "@/utils/types"
+import { type LoggedUser } from "./ChatBubble"
 
 interface Props {
   isOpen: boolean
   onClose: (value: boolean) => void
+  systemUsers: Options
+  loggedUser: LoggedUser | null
 }
 
-export const Groups = ({ isOpen, onClose }: Props) => {
-  const { chats, handleSelectChat } = useChat()
+export const Groups = ({ isOpen, onClose, systemUsers, loggedUser }: Props) => {
+  const { chats, handleSelectChat } = useChat({ loggedUser })
   const [containerRef] = useClickOutside({ handler: onClose })
 
   if (!isOpen) return null
@@ -22,7 +26,7 @@ export const Groups = ({ isOpen, onClose }: Props) => {
     >
       <header className="mb-2 px-2 flex items-center justify-between gap-2">
         <h3 className="font-semibold text-lg">Grupos</h3>
-        <CreateGroup />
+        <CreateGroup users={systemUsers} />
       </header>
       <section>
         <ul className="divide-y divide-neutral-300 dark:divide-neutral-600">

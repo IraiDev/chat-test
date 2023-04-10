@@ -7,20 +7,11 @@ import { ModalAction } from "./modal/ModalAction"
 import { useSocketStore } from "@/store/SocketStore"
 import { SERVER_CHANNELS } from "@/utils/constants"
 import {
+  type Options,
   type InputChangeEvent,
   type MultiSelectChangeEvent,
 } from "@/utils/types"
-import { USERS } from "@/store/UserStore"
 import { useUser } from "@/hooks"
-
-function formatOptions(array: any[] = [], loggedUser: number) {
-  return array
-    .filter((item) => item.id !== loggedUser)
-    .map((el) => ({
-      label: el.name,
-      value: el.id,
-    }))
-}
 
 const INIT_FORM_STATE = {
   name: "",
@@ -28,9 +19,13 @@ const INIT_FORM_STATE = {
   users: [],
 }
 
-export const CreateGroup = () => {
+interface Props {
+  users: Options
+}
+
+export const CreateGroup = ({ users: options = [] }: Props) => {
   const { connection } = useSocketStore()
-  const { token = "", id = 0 } = useUser()
+  const { token = "" } = useUser()
   const [isOpen, setIsOpen] = useState(false)
   const [{ description, name, users }, setForm] = useState(INIT_FORM_STATE)
 
@@ -96,7 +91,7 @@ export const CreateGroup = () => {
               value={users}
               onChange={handleChange}
               label="Seleccione usuarios"
-              options={formatOptions(USERS, id)}
+              options={options}
             />
           </section>
           <ModalAction>

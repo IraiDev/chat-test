@@ -1,25 +1,36 @@
-import { useEffect } from "react"
-import io from "socket.io-client"
 import { ChatBubble } from "./components/ChatBubble"
-import { useSocketStore } from "./store/SocketStore"
-import { USERS } from "./store/UserStore"
-import { SERVER_CHANNELS } from "./utils/constants"
+import { type User } from "./store/UserStore"
 import { useUser } from "./hooks/useUser"
+import { type Options } from "./utils/types"
+
+export const USERS: User[] = [
+  {
+    id: 290,
+    name: "Ignacio A.",
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImlhcnJpYWdhZGEiLCJ1c2VySWQiOiIyOTAiLCJlbnRlcnByaXNlSWQiOiIxIiwiaWF0IjoxNjgwNTM3NzUwfQ.oryFS6JMdh2FE8iMKzFUyb5DleYofp67Fzqo24dOn-o",
+  },
+  {
+    id: 213,
+    name: "Sebastian A.",
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNhY3VuYSIsInVzZXJJZCI6IjIxMyIsImVudGVycHJpc2VJZCI6IjEiLCJpYXQiOjE2ODA4MDMyNDJ9.ptViEPL9zOh16fUPkoOU68-T0b5CK07LiAg8mKkDyaM",
+  },
+  // { id: 3, name: 'Rodrigo del C.', token: 'rdelcanto' },
+  // { id: 2, name: 'Felix M.', token: 'fmarin' },
+  // { id: 4, name: 'Luis V.', token: 'lvergara' }
+]
+function formatUser(array: User[], loggedUserId: number): Options {
+  return array
+    .filter((el) => el.id !== loggedUserId)
+    .map((user) => ({
+      label: user.name,
+      value: user.id.toString(),
+    }))
+}
 
 const App = () => {
-  const { saveConnection, clearConnection } = useSocketStore()
   const { user, setUser } = useUser()
-
-  useEffect(() => {
-    if (user === null) return
-    const socketConnection = io("https://chat.zpruebas.cl")
-    socketConnection.emit(SERVER_CHANNELS.login, user.token)
-    saveConnection(socketConnection)
-    return () => {
-      socketConnection.disconnect()
-      clearConnection()
-    }
-  }, [user])
 
   return (
     <main
@@ -31,10 +42,10 @@ const App = () => {
           {USERS.map((us) => (
             <li
               className={`
-                  px-2 py-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-700
-                  cursor-pointer transition-colors duration-200
-                  ${user?.id === us.id ? "text-blue-600 font-bold" : ""}
-                `}
+                px-2 py-1.5 hover:bg-neutral-200 dark:hover:bg-neutral-700
+                cursor-pointer transition-colors duration-200
+                ${user?.id === us.id ? "text-blue-600 font-bold" : ""}
+              `}
               key={us.id}
               onClick={() => {
                 setUser(us)
@@ -46,7 +57,13 @@ const App = () => {
         </ul>
       </div>
 
-      {user !== null && <ChatBubble />}
+      {user !== null && (
+        <ChatBubble
+          loggedUser={user}
+          socketUrl="https://chat.zpruebas.cl"
+          systemUsers={formatUser(USERS, user.id)}
+        />
+      )}
     </main>
   )
 }

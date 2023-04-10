@@ -20,5 +20,6 @@ module.exports = {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/strict-boolean-expressions": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/array-type": "off",
   },
 }
