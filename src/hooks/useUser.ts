@@ -6,6 +6,7 @@ export const useUser = () => {
   return {
     setUser,
     clearUser,
-    user
+    user,
+    ...user,
   }
 }

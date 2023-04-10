@@ -21,9 +21,7 @@ export const ChatHeader = ({ chatName, showGroup }: Props) => {
       >
         <BiMenu />
       </button>
-      <picture
-        className="rounded-full h-8 w-8 grid place-content-center bg-neutral-300"
-      >
+      <picture className="rounded-full h-8 w-8 grid place-content-center bg-neutral-300">
         <HiUserGroup className="text-xl text-neutral-600" />
       </picture>
       <h1 className="font-bold text-xl first-letter:uppercase max-w-[180px] truncate">

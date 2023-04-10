@@ -1,4 +1,4 @@
-import { useRef, useLayoutEffect } from 'react'
+import { useRef, useLayoutEffect } from "react"
 
 interface Props {
   handler: (value: boolean) => void
@@ -14,10 +14,10 @@ export const useClickOutside = ({ handler }: Props) => {
         handler(false)
       }
     }
-    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener("mousedown", handleClickOutside)
 
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener("mousedown", handleClickOutside)
     }
   }, [ref])
 
