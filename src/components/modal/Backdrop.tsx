@@ -17,9 +17,9 @@ export function Backdrop({ children, isOpen }: Props) {
         <animated.main
           style={style}
           className="
-        h-screen w-full grid place-content-center fixed inset-0
-        bg-neutral-900/30 dark:bg-neutral-900/80
-      "
+          h-screen w-full grid place-content-center fixed inset-0
+          bg-neutral-900/30 dark:bg-neutral-900/80
+        "
         >
           {children}
         </animated.main>

@@ -8,10 +8,10 @@ import { Groups } from "./Groups"
 import { useChat } from "../hooks/useChat"
 import { useChatContext } from "../store/ChatStore"
 import { CLIENT_CHANNELS } from "../utils/constants"
-import { type NotReadedMessages } from "../models/chat.model"
+import { type NotReadedMessagesProps } from "../models/chat.model"
 
 interface BtnProps {
-  notReadedMessages: NotReadedMessages
+  notReadedMessages: NotReadedMessagesProps
   onClick: () => void
 }
 
@@ -49,7 +49,7 @@ export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
 
   return (
     <Popover
-      open={isChatOpen}
+      isOpen={isChatOpen}
       btnComponent={
         <ChatButton notReadedMessages={notReadedMessages} onClick={handleOpenChat} />
       }
@@ -81,7 +81,7 @@ const ChatButton = ({ onClick, notReadedMessages }: BtnProps) => {
       {notReadedMessages.total > 0 && (
         <span
           className="absolute -top-1 -right-1 bg-red-500 rounded-full h-5 w-5 grid 
-          place-content-center text-xs"
+          place-content-center text-xs animate-bounce"
         >
           {notReadedMessages.normalized}
         </span>

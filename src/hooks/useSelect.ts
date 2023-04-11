@@ -1,20 +1,35 @@
-import { type SelectProps, type SelectOption } from '@/utils/types'
-import { type ReactNode, useEffect, useRef, useState, type ChangeEvent } from 'react'
+import { type ReactNode, useEffect, useRef, useState, type ChangeEvent } from "react"
+import { type SelectProps, type SelectOption } from "../utils/types"
 
-const INIT_SELECT_VALUE = { label: 'ninguno', value: '' }
+const INIT_SELECT_VALUE = { label: "ninguno", value: "" }
 function adaptedOptions(enableEmptyOption: boolean, options: SelectOption[]) {
   return enableEmptyOption ? [...options, INIT_SELECT_VALUE] : options
 }
 
-type Props = Pick<SelectProps, 'findBy' | 'name' | 'onBlur' | 'onChange' | 'value' | 'options' | 'enableEmptyOption'>
+type Props = Pick<
+  SelectProps,
+  "findBy" | "name" | "onBlur" | "onChange" | "value" | "options" | "enableEmptyOption"
+>
 
-export function useSelect({ findBy, options, value, name, enableEmptyOption = false, onBlur, onChange }: Props) {
+export function useSelect({
+  findBy,
+  options,
+  value,
+  name,
+  enableEmptyOption = false,
+  onBlur,
+  onChange,
+}: Props) {
   const inputRef = useRef<HTMLInputElement>(null)
   const wrapperRef = useRef<HTMLDivElement>(null)
   const [isOpen, setIsOpen] = useState(false)
-  const [optionsState, setOptionsState] = useState<SelectOption[]>(adaptedOptions(enableEmptyOption, options))
-  const [avatar, setAvatar] = useState<string | ReactNode>('')
-  const [selectValue, setSelectValue] = useState<SelectOption | undefined>(enableEmptyOption ? INIT_SELECT_VALUE : undefined)
+  const [optionsState, setOptionsState] = useState<SelectOption[]>(
+    adaptedOptions(enableEmptyOption, options)
+  )
+  const [avatar, setAvatar] = useState<string | ReactNode>("")
+  const [selectValue, setSelectValue] = useState<SelectOption | undefined>(
+    enableEmptyOption ? INIT_SELECT_VALUE : undefined
+  )
 
   const setInputValue = (value: string) => (inputRef.current!.value = value)
 
@@ -28,7 +43,7 @@ export function useSelect({ findBy, options, value, name, enableEmptyOption = fa
     setInputValue(option.label)
     setSelectValue(option)
     setAvatar(option.avatar)
-    onChange?.({ target: { value: option, type: 'text', name: name! } })
+    onChange?.({ target: { value: option, type: "text", name: name! } })
     setOptionsState(adaptedOptions(enableEmptyOption, options))
   }
 
@@ -36,7 +51,7 @@ export function useSelect({ findBy, options, value, name, enableEmptyOption = fa
     const inputValue = e.target.value
     const newOptions = adaptedOptions(enableEmptyOption, options)
     setInputValue(inputValue)
-    if (findBy === 'label') {
+    if (findBy === "label") {
       setOptionsState(
         newOptions.filter((opt) =>
           opt.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase().trim())
@@ -50,7 +65,7 @@ export function useSelect({ findBy, options, value, name, enableEmptyOption = fa
   useEffect(() => {
     const newOptions = adaptedOptions(enableEmptyOption, options)
     const selectedOption = newOptions.find((opt) => opt.value === value?.value)
-    setInputValue(selectedOption?.label ?? '')
+    setInputValue(selectedOption?.label ?? "")
     setSelectValue(selectedOption)
     setOptionsState(newOptions)
     setAvatar(value?.avatar)
@@ -59,17 +74,17 @@ export function useSelect({ findBy, options, value, name, enableEmptyOption = fa
   // outside click listener
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if ((wrapperRef.current != null) && !wrapperRef.current.contains(e.target as Node)) {
+      if (wrapperRef.current != null && !wrapperRef.current.contains(e.target as Node)) {
         setIsOpen(false)
         Boolean(onBlur) &&
-          onBlur?.({ target: { value: value!, type: 'text', name: name ?? '' } })
+          onBlur?.({ target: { value: value!, type: "text", name: name ?? "" } })
       }
     }
 
-    document.addEventListener('mousedown', handleOutsideClick)
+    document.addEventListener("mousedown", handleOutsideClick)
 
     return () => {
-      document.removeEventListener('mousedown', handleOutsideClick)
+      document.removeEventListener("mousedown", handleOutsideClick)
     }
     // eslint-disable-next-line
   }, [wrapperRef])
@@ -84,6 +99,6 @@ export function useSelect({ findBy, options, value, name, enableEmptyOption = fa
     setInputValue,
     handleFindInOptions,
     handleOpenOptions,
-    handleSelectOption
+    handleSelectOption,
   }
 }

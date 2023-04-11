@@ -19,7 +19,12 @@ export interface IMessage {
   dateTimeSent: string
 }
 
-export interface NotReadedMessages {
+export interface NotReadedMessagesProps {
   total: number
   normalized: string
+}
+
+export interface NotReadedMessages {
+  quantity: number
+  uid: string
 }

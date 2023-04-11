@@ -2,9 +2,10 @@ import { useEffect, useMemo, useState } from "react"
 import { CLIENT_CHANNELS, SERVER_CHANNELS } from "../utils/constants"
 import { useChatContext } from "../store/ChatStore"
 import {
-  type NotReadedMessages,
+  type NotReadedMessagesProps,
   type IChat,
   type IMessage,
+  type NotReadedMessages,
 } from "../models/chat.model"
 
 export function useChat() {
@@ -13,7 +14,7 @@ export function useChat() {
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null)
   const [messages, setMessages] = useState<IMessage[]>([])
 
-  const notReadedMessages: NotReadedMessages = useMemo(() => {
+  const notReadedMessages: NotReadedMessagesProps = useMemo(() => {
     const notReaded = chats
       .filter((chat) => chat.notReadedMessages > 0)
       .reduce((acc, cur) => acc + cur.notReadedMessages, 0)
@@ -42,9 +43,20 @@ export function useChat() {
   // ? efecto para almacenar la data de los chats/grupos
   useEffect(() => {
     if (connection === null) return
+    let notReaded: NotReadedMessages | null = null
+
+    connection.on(CLIENT_CHANNELS["new-messages"], (data: NotReadedMessages) => {
+      notReaded = data
+    })
+
     connection.on(CLIENT_CHANNELS.chats, (data: IChat[]) => {
-      console.log(data)
-      setChats(data)
+      setChats(
+        data.map((item) => ({
+          ...item,
+          notReadedMessages:
+            item.uid === notReaded?.uid ? notReaded?.quantity : item.notReadedMessages,
+        }))
+      )
     })
 
     return () => {

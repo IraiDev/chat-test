@@ -1,5 +1,5 @@
-import { type MultiSelectProps, type SelectOption } from "@/utils/types"
 import { useEffect, useRef, useState, type ChangeEvent } from "react"
+import { type MultiSelectProps, type SelectOption } from "../utils/types"
 
 type Props = Pick<
   MultiSelectProps,
@@ -29,10 +29,7 @@ export function useMultiSelect({
 
   const handleSelectOption = (option: SelectOption) => {
     const values: string[] = [
-      ...new Set([
-        ...(value !== undefined ? value : selectValue),
-        option.value,
-      ]),
+      ...new Set([...(value !== undefined ? value : selectValue), option.value]),
     ]
     setInputValue("")
     setSelectValue(values)
@@ -41,9 +38,7 @@ export function useMultiSelect({
   }
 
   const handleClearOption = (key: string) => {
-    const values: string[] = [...value, ...selectValue].filter(
-      (item) => item !== key
-    )
+    const values: string[] = [...value, ...selectValue].filter((item) => item !== key)
     onChange?.({ target: { value: values, type: "text", name: name! } })
     setOptionsState(options.filter((opt) => !values.includes(opt.value)))
     setInputValue("")
@@ -59,16 +54,12 @@ export function useMultiSelect({
     if (findBy === "label") {
       setOptionsState(
         notSelectedOptions.filter((option) =>
-          option.label
-            .toLocaleLowerCase()
-            .includes(inputValue.toLocaleLowerCase().trim())
+          option.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase().trim())
         )
       )
       return
     }
-    setOptionsState(
-      notSelectedOptions.filter((option) => option.value === inputValue)
-    )
+    setOptionsState(notSelectedOptions.filter((option) => option.value === inputValue))
   }
   // first load component
   useEffect(() => {
@@ -79,13 +70,9 @@ export function useMultiSelect({
   // outside click listener
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
-      if (
-        wrapperRef.current != null &&
-        !wrapperRef.current.contains(e.target as Node)
-      ) {
+      if (wrapperRef.current != null && !wrapperRef.current.contains(e.target as Node)) {
         setIsOpen(false)
-        Boolean(onBlur) &&
-          onBlur?.({ target: { value, type: "text", name: name! } })
+        Boolean(onBlur) && onBlur?.({ target: { value, type: "text", name: name! } })
       }
     }
 

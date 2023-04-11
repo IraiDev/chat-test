@@ -1,6 +1,6 @@
 /* eslint-disable react/display-name */
 import React, { forwardRef } from "react"
-import { type ReactRef } from "@/utils/types"
+import { type ReactRef } from "../../utils/types"
 
 interface Props {
   id: string
