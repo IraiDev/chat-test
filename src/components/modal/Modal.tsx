@@ -1,3 +1,4 @@
+import React from "react"
 import { createPortal } from "react-dom"
 import { Backdrop } from "./Backdrop"
 import { ModalWrapper } from "./ModalWrapper"
@@ -32,18 +33,14 @@ export function Modal({
   children,
   isOpen,
   onClose,
-  maxWidth = "md",
+  // maxWidth = "md",
   title,
   hideCloseBtn,
 }: ModalProps) {
   return createPortal(
     <Backdrop isOpen={isOpen}>
-      <ModalWrapper isOpen={isOpen} maxWidth={WIDTH_SIZE[maxWidth]}>
-        <ModalHeader
-          onClose={onClose}
-          hideCloseBtn={hideCloseBtn}
-          title={title}
-        />
+      <ModalWrapper isOpen={isOpen} maxWidth="w-80">
+        <ModalHeader onClose={onClose} hideCloseBtn={hideCloseBtn} title={title} />
         <>{children}</>
       </ModalWrapper>
     </Backdrop>,

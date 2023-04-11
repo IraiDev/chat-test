@@ -1,7 +1,7 @@
-import { useId } from "react"
-import { useSelect } from "@/hooks"
+import React, { useId } from "react"
+import { useSelect } from "../../hooks"
 import { AvatarSelect, SelectWrapper, InputSelect, SelectDropdown } from "./"
-import { type SelectProps } from "@/utils/types"
+import { type SelectProps } from "../../utils/types"
 
 export function Select({
   label,

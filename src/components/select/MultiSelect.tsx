@@ -1,12 +1,19 @@
-import { useMemo, useCallback, useId } from "react"
+import React, { useMemo, useCallback, useId } from "react"
 import { TbX } from "react-icons/tb"
-import { useMultiSelect } from "@/hooks"
+import { useMultiSelect } from "../../hooks"
 import { AvatarSelect, SelectDropdown, SelectWrapper, InputSelect } from "./"
 import {
   type SelectOption,
   type MultiSelectProps,
   type LabelDisplay,
-} from "@/utils/types"
+} from "../../utils/types"
+
+interface Props {
+  value: string[]
+  options: SelectOption[]
+  labelDisplay?: LabelDisplay
+  onClear: (key: string) => void
+}
 
 export function MultiSelect({
   value = [],
@@ -68,19 +75,7 @@ export function MultiSelect({
   )
 }
 
-interface Props {
-  value: string[]
-  options: SelectOption[]
-  labelDisplay?: LabelDisplay
-  onClear: (key: string) => void
-}
-
-function MultiItems({
-  value = [],
-  options,
-  labelDisplay = "both",
-  onClear,
-}: Props) {
+function MultiItems({ value = [], options, labelDisplay = "both", onClear }: Props) {
   const filteredOptions = useMemo(() => {
     return options.filter((option) => value.includes(option.value))
   }, [value, options])
@@ -110,12 +105,15 @@ function MultiItems({
         <li
           key={item.value}
           className={`
-            flex gap-2 items-center bg-gray-50 rounded-md shadow-md shadow-neutral-300/50 pl-2 text-xs border-t border-x overflow-hidden w-max
+            flex gap-2 items-center bg-neutral-50 rounded-md shadow-md shadow-neutral-300/50 pl-2 
+            text-xs border overflow-hidden w-max dark:bg-neutral-700 dark:text-neutral-50
+            dark:shadow-none dark:border-neutral-500
           `}
         >
           {LiContent(item)}
           <button
-            className="h-7 w-7 grid place-content-center hover:bg-gray-200/60 transition text-gray-500"
+            className="h-7 w-7 grid place-content-center hover:bg-neutral-200/60 transition 
+            text-neutral-500 dark:text-neutral-400"
             onClick={() => {
               onClear(item.value)
             }}

@@ -1,3 +1,4 @@
+import React from "react"
 import { TbSelector } from "react-icons/tb"
 import { FieldHelper } from "../field/FieldHelper"
 import { FieldWrapper } from "../field/FieldWrapper"
@@ -17,12 +18,7 @@ interface Props {
   onClick: () => void
 }
 
-export function SelectWrapper({
-  children,
-  label,
-  isMulti = false,
-  ...props
-}: Props) {
+export function SelectWrapper({ children, label, isMulti = false, ...props }: Props) {
   const className = `${CLASSNAME} ${isMulti ? " pt-5 pb-1.5" : ""}`
   return (
     <div className="space-y-1 relative">
@@ -39,7 +35,10 @@ export function SelectWrapper({
 
 function Icon() {
   return (
-    <span className="absolute top-1/2 -translate-y-1/2 right-2 text-neutral-500 group-hover:text-neutral-900 transition">
+    <span
+      className="absolute top-1/2 -translate-y-1/2 right-2 text-neutral-500 
+      group-hover:text-neutral-900 transition dark:group-hover:text-neutral-100"
+    >
       <TbSelector className="text-xl" />
     </span>
   )

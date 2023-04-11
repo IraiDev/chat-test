@@ -1,8 +1,8 @@
-import { type InputProps } from "@/utils/types"
-import { useId } from "react"
+import React, { useId } from "react"
 import { FieldAdorment } from "./FieldAdorment"
 import { FieldHelper } from "./FieldHelper"
 import { FieldWrapper } from "./FieldWrapper"
+import { type InputProps } from "../../utils/types"
 
 interface Props extends InputProps {
   startAdorment?: React.ReactNode
@@ -32,12 +32,13 @@ export function Input(props: Props) {
           disabled={disabled}
           placeholder={placeholder}
           className="peer h-8 w-full border-none bg-transparent p-0 placeholder-transparent 
-          focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+          focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm dark:text-neutral-50"
         />
 
         <span
-          className={`absolute left-3 top-3 -translate-y-1/2 text-xs text-neutral-400 
-          transition-all peer-focus:top-3 peer-focus:text-xs peer-focus:text-neutral-500 
+          className={`absolute left-3 top-3 -translate-y-1/2 text-xs text-neutral-500 dark:text-neutral-400 
+          transition-all peer-focus:top-3 peer-focus:text-xs peer-focus:text-neutral-600 
+          dark:peer-focus:text-neutral-300
           ${
             props.startAdorment !== undefined
               ? ""

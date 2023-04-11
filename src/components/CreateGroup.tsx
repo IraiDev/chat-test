@@ -1,26 +1,17 @@
-import { type FormEvent, useState } from "react"
+import React, { type FormEvent, useState } from "react"
 import { HiOutlinePlusSm } from "react-icons/hi"
 import { Modal } from "./modal/Modal"
 import { MultiSelect } from "./select"
-import { Input } from "./field"
+import { Input, Textarea } from "./field"
 import { ModalAction } from "./modal/ModalAction"
-import { useSocketStore } from "@/store/SocketStore"
-import { SERVER_CHANNELS } from "@/utils/constants"
+import { SERVER_CHANNELS } from "../utils/constants"
 import {
+  type TextareaChangeEvent,
   type InputChangeEvent,
   type MultiSelectChangeEvent,
-} from "@/utils/types"
-import { USERS } from "@/store/UserStore"
-import { useUser } from "@/hooks"
-
-function formatOptions(array: any[] = [], loggedUser: number) {
-  return array
-    .filter((item) => item.id !== loggedUser)
-    .map((el) => ({
-      label: el.name,
-      value: el.id,
-    }))
-}
+} from "../utils/types"
+import { useChatContext } from "../store/ChatStore"
+import { usersOptionsAdapter } from "../utils/functions"
 
 const INIT_FORM_STATE = {
   name: "",
@@ -28,13 +19,21 @@ const INIT_FORM_STATE = {
   users: [],
 }
 
+const INIT_ERROR_STATE = {
+  description: "",
+  name: "",
+  users: "",
+}
+
 export const CreateGroup = () => {
-  const { connection } = useSocketStore()
-  const { token = "", id = 0 } = useUser()
+  const { connection, loggedUser, usersList } = useChatContext()
   const [isOpen, setIsOpen] = useState(false)
   const [{ description, name, users }, setForm] = useState(INIT_FORM_STATE)
+  const [errors, setErrors] = useState(INIT_ERROR_STATE)
 
-  const handleChange = (e: InputChangeEvent | MultiSelectChangeEvent) => {
+  const handleChange = (
+    e: InputChangeEvent | MultiSelectChangeEvent | TextareaChangeEvent
+  ) => {
     const value = e.target.value
     const name = e.target.name
     setForm((prevValues) => ({
@@ -47,20 +46,34 @@ export const CreateGroup = () => {
   }
   const handleReset = () => {
     setIsOpen(false)
+    setErrors(INIT_ERROR_STATE)
     setForm(INIT_FORM_STATE)
   }
-  const handleCreateGroup = (e: FormEvent) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+
+    const haveEmptyField = Object.values({ description, name, users }).some(
+      (value) => value === ""
+    )
+
+    if (haveEmptyField) {
+      setErrors({
+        description: description === "" ? "Obligatorio" : "",
+        name: name === "" ? "Obligatorio" : "",
+        users: users.length === 0 ? "Obligatorio" : "",
+      })
+      return
+    }
+
     if (connection === null) return
     connection.emit(SERVER_CHANNELS["create-chat"], {
       description,
       users,
       name,
       isGroup: true,
-      token,
+      token: loggedUser?.token,
     })
-    setIsOpen(false)
-    setForm(INIT_FORM_STATE)
+    handleReset()
   }
   return (
     <>
@@ -73,37 +86,48 @@ export const CreateGroup = () => {
         <HiOutlinePlusSm />
       </button>
 
-      <Modal isOpen={isOpen} onClose={setIsOpen} title="Nuevo grupo">
+      <Modal isOpen={isOpen} onClose={handleReset} title="Nuevo grupo">
         <form
-          onSubmit={handleCreateGroup}
+          onSubmit={handleSubmit}
           className="divide-y divide-neutral-300 dark:divide-neutral-600"
         >
           <section className="p-3 py-5 space-y-3 min-w-full">
-            <Input
-              name="name"
-              value={name}
-              onChange={handleChange}
-              label="Nombre del grupo"
-            />
-            <Input
-              name="description"
-              value={description}
-              onChange={handleChange}
-              label="Descripcion"
-            />
             <MultiSelect
               name="users"
               value={users}
               onChange={handleChange}
               label="Seleccione usuarios"
-              options={formatOptions(USERS, id)}
+              error={errors.users !== ""}
+              helperText={errors.users}
+              options={usersOptionsAdapter({
+                array: usersList,
+                loggedUserId: loggedUser?.id ?? 0,
+              })}
+            />
+            <Input
+              name="name"
+              value={name}
+              onChange={handleChange}
+              label="Nombre del grupo"
+              error={errors.name !== ""}
+              helperText={errors.name}
+            />
+            <Textarea
+              name="description"
+              value={description}
+              onChange={handleChange}
+              label="Descripcion"
+              error={errors.description !== ""}
+              helperText={errors.description}
             />
           </section>
           <ModalAction>
             <button
+              type="button"
               onClick={handleReset}
               className="bg-neutral-200 hover:bg-neutral-300 transition-colors
-              rounded-xl px-3 py-1.5 font-semibold duration-200"
+              rounded-xl px-3 py-1.5 font-semibold duration-200 dark:bg-neutral-700
+              dark:hover:bg-neutral-600 dark:text-neutral-50"
             >
               Cancelar
             </button>

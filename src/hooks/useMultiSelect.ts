@@ -29,7 +29,10 @@ export function useMultiSelect({
 
   const handleSelectOption = (option: SelectOption) => {
     const values: string[] = [
-      ...new Set([...value, ...selectValue, option.value]),
+      ...new Set([
+        ...(value !== undefined ? value : selectValue),
+        option.value,
+      ]),
     ]
     setInputValue("")
     setSelectValue(values)

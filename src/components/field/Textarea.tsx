@@ -1,14 +1,22 @@
-import { useId } from 'react'
-import { FieldHelper } from './FieldHelper'
-import { type TextareaProps } from '@/utils/types'
-import { FieldWrapper } from './FieldWrapper'
+import React, { useId } from "react"
+import { FieldHelper } from "./FieldHelper"
+import { FieldWrapper } from "./FieldWrapper"
+import { type TextareaProps } from "../../utils/types"
 
 export function Textarea(props: TextareaProps) {
-  const { error = false, disabled = false, helperText = '', label, placeholder = label, rows = 7, ...rest } = props
+  const {
+    error = false,
+    disabled = false,
+    helperText = "",
+    label,
+    placeholder = label,
+    rows = 4,
+    ...rest
+  } = props
   const textareaId = useId()
 
   return (
-    <div className='space-y-1'>
+    <div className="space-y-1">
       <FieldWrapper disabled={disabled} error={error} htmlFor={textareaId}>
         <textarea
           {...rest}
@@ -16,13 +24,19 @@ export function Textarea(props: TextareaProps) {
           id={textareaId}
           disabled={disabled}
           placeholder={placeholder}
-          className="peer w-full border-none bg-transparent pt-2 placeholder-transparent focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm"
+          className="peer w-full border-none bg-transparent pt-2 placeholder-transparent resize-none scroll-app
+          focus:border-transparent focus:outline-none focus:ring-0 sm:text-sm dark:text-neutral-50"
         ></textarea>
 
         <span
-          className={`absolute left-3 top-1 text-xs text-gray-400 transition-all peer-placeholder-shown:top-3 peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs w-full block peer-focus:text-indigo-500
-          ${disabled ? 'bg-neutral-100' : 'bg-white'}
-        `}>
+          className={`
+          absolute left-3 top-1 text-xs transition-all peer-placeholder-shown:top-3 
+          peer-placeholder-shown:text-sm peer-focus:top-1 peer-focus:text-xs w-full block 
+          text-neutral-500 dark:text-neutral-400
+          peer-focus:text-neutral-600 dark:peer-focus:text-neutral-300
+          ${disabled ? "bg-neutral-100 dark:bg-neutral-700" : ""}
+        `}
+        >
           {label}:
         </span>
       </FieldWrapper>
@@ -30,7 +44,8 @@ export function Textarea(props: TextareaProps) {
         isError={error}
         helperText={helperText}
         maxLength={props.maxLength}
-        currentLength={props.value?.length} />
+        currentLength={props.value?.length}
+      />
     </div>
   )
 }

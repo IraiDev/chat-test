@@ -1,32 +1,45 @@
-import { create } from 'zustand'
-
-export interface IChat {
-  id: number
-  uid: string
-  enterpriseId: number
-  creatorUserId: number
-  name: string
-  description: string
-  is_group: boolean
-  lastConnection: string
-}
+import { create } from "zustand"
+import { type Socket } from "socket.io-client"
+import { type IUser, type LoggedUser } from "../models/user.model"
 
 interface Store {
-  chats: IChat[]
-  selectedChat: IChat | null
-  setChats: (chats: IChat[]) => void
-  updateChats: (chats: IChat[]) => void
-  clearChatsState: () => void
-  selectChat: (chat: IChat) => void
-  clearSelectedChat: () => void
+  // * control del estado de socket
+  connection: Socket | null
+  saveConnection: (socket: Socket) => void
+  clearConnection: () => void
+  // ? control del estado del usuario del chat
+  loggedUser: LoggedUser
+  signIn: (user: LoggedUser) => void
+  signOut: () => void
+  // ! control del estado de lista de usuarios
+  usersList: IUser[]
+  loadUsers: (users: IUser[]) => void
+  clearUsers: () => void
 }
 
-export const useChatsStore = create<Store>((set) => ({
-  chats: [],
-  selectedChat: null,
-  setChats: (chats) => { set(() => ({ chats })) },
-  updateChats: (chats) => { set(({ chats: prevChats }) => ({ chats: [...prevChats, ...chats] })) },
-  clearChatsState: () => { set(() => ({ chats: [] })) },
-  selectChat: (chat) => { set(() => ({ selectedChat: chat })) },
-  clearSelectedChat: () => { set(() => ({ selectedChat: null })) }
+export const useChatContext = create<Store>((set) => ({
+  // * control del estado de socket
+  connection: null,
+  saveConnection: (socket) => {
+    set(() => ({ connection: socket }))
+  },
+  clearConnection: () => {
+    set(() => ({ connection: null }))
+  },
+  // ? control del estado del usuario del chat
+  loggedUser: null,
+  signIn: (user) => {
+    set(() => ({ loggedUser: user }))
+  },
+  signOut: () => {
+    set(() => ({ loggedUser: null }))
+  },
+  // ! control del estado de lista de usuarios
+  usersList: [],
+  loadUsers: (users) => {
+    set(() => ({ usersList: users }))
+  },
+  clearUsers: () => {
+    set(() => ({ usersList: [] }))
+  },
 }))

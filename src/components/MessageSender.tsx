@@ -1,64 +1,86 @@
-import { type ChangeEvent, type FormEvent, useRef } from 'react'
+import React, {
+  type ChangeEvent,
+  type FormEvent,
+  type KeyboardEvent,
+  useRef,
+  useState,
+} from "react"
 import { BsSendFill } from "react-icons/bs"
-import { useSocketStore } from '../store/SocketStore'
-import { SERVER_CHANNELS } from '../utils/constants'
-import { useUser } from '../hooks/useUser'
-import { useChat } from '../hooks/useChat'
+import { SERVER_CHANNELS } from "../utils/constants"
+import { useChatContext } from "../store/ChatStore"
 
-export const MessageSender = () => {
-  const { connection } = useSocketStore()
-  const { user } = useUser()
-  const { selectedChat } = useChat()
-  const inputRef = useRef<HTMLTextAreaElement>(null)
+interface Props {
+  chatUid: string
+}
+
+export const MessageSender = ({ chatUid }: Props) => {
+  const { connection, loggedUser } = useChatContext()
+  const [message, setMessage] = useState("")
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  const sendMessage = () => {
+    if (textareaRef.current === null || connection === null || loggedUser === null) return
+    if (message === "") return
+
+    connection.emit(SERVER_CHANNELS.messages, {
+      message,
+      token: loggedUser.token,
+      chatUid,
+    })
+
+    setMessage("")
+    textareaRef.current.style.height = "auto"
+  }
 
   const handleChangeValue = (e: ChangeEvent<HTMLTextAreaElement>) => {
-    if (inputRef.current === null) return
-
     const value = e.target.value
     const scrollHeight = e.target.scrollHeight
     e.target.style.height = `${scrollHeight}px`
+    setMessage(value)
 
-    inputRef.current.value = value
-
-    if (value === '') {
-      e.target.style.height = 'auto'
+    if (value === "") {
+      e.target.style.height = "auto"
     }
   }
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
+    sendMessage()
+  }
 
-    if (inputRef.current === null || connection === null || user === null) return
-
-    const message = inputRef.current.value
-
-    connection.emit(SERVER_CHANNELS.messages, { message, token: user.token, chatUid: selectedChat?.uid })
-    inputRef.current.value = ''
-    inputRef.current.style.height = 'auto'
+  const handleKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key !== "Enter") return
+    e.preventDefault()
+    sendMessage()
   }
 
   return (
     <footer className="p-2">
       <form
         onSubmit={handleSubmit}
-        className='p-2 bg-white rounded-xl flex items-center gap-2 shadow-md
-        border border-neutral-300 dark:border-neutral-600'
+        className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded-xl flex items-center gap-2 shadow-md
+        border border-neutral-300 dark:border-neutral-600"
       >
         <textarea
-          className="py-1.5 px-3 rounded-lg outline-none bg-neutral-200/60 
-          dark:bg-neutral-700 hover:ring-2 hover:ring-emerald-600 w-full
-          transition duration-200 scroll-app h-auto resize-none"
+          disabled={chatUid === ""}
           name="message"
           autoComplete="off"
           rows={1}
-          ref={inputRef}
+          ref={textareaRef}
+          value={message}
+          onKeyDown={handleKeyDown}
           onChange={handleChangeValue}
+          className="py-1.5 px-3 rounded-lg outline-none bg-neutral-200/60 
+          dark:bg-neutral-700 hover:ring-2 hover:ring-emerald-600 w-full
+          transition duration-200 scroll-app h-auto resize-none disabled:hover:ring-transparent"
         ></textarea>
         <button
-          type='submit'
-          className='min-w-[36px] h-9 grid place-content-center bg-emerald-600 
+          disabled={message === ""}
+          type="submit"
+          className="min-w-[36px] h-9 grid place-content-center bg-emerald-600 
           hover:bg-emerald-500 text-white transition duration-200 outline-none
-          rounded-full'
+          rounded-full disabled:bg-neutral-300 disabled:hover:bg-neutral-300
+          dark:bg-neutral-600 dark:disabled:bg-neutral-700 dark:disabled:hover:bg-neutral-700"
         >
           <BsSendFill />
         </button>

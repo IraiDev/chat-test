@@ -1,3 +1,5 @@
+import React from "react"
+
 interface Props {
   children: React.ReactNode
   htmlFor: string
@@ -16,7 +18,7 @@ const styles = ({ error, disabled }: Styles): string => {
   if (disabled) {
     return "focus-within:ring-transparent focus-within:border-transparent border-transparent text-neutral-400 bg-neutral-100"
   }
-  return "focus-within:ring-neutral-500 focus-within:border-neutral-500 border-neutral-200 hover:focus-within:border-neutral-500 hover:border-neutral-400/60"
+  return "focus-within:ring-neutral-500 focus-within:border-neutral-500 border-neutral-200 dark:border-neutral-700 hover:focus-within:border-neutral-500 hover:border-neutral-400/60"
 }
 
 export function FieldWrapper({

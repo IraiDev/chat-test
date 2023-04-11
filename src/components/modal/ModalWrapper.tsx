@@ -1,3 +1,4 @@
+import React from "react"
 import { useTransition, animated } from "@react-spring/web"
 import { type ModalProps } from "./Modal"
 
@@ -21,8 +22,8 @@ export function ModalWrapper({ children, maxWidth = "", isOpen }: Props) {
               style={style}
               className="
               bg-white dark:bg-neutral-800 rounded-xl divide-y divide-neutral-300
-              dark:divide-neutral-600 ring-2 ring-neutral-50 dark:ring-neutral-800
-              relative w-full
+              dark:divide-neutral-600 ring-1 ring-neutral-50 dark:ring-neutral-700
+              relative w-full shadow-lg dark:shadow-neutral-700/30
             "
             >
               {children}
