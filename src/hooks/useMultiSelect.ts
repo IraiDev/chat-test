@@ -35,6 +35,7 @@ export function useMultiSelect({
     setSelectValue(values)
     onChange?.({ target: { value: values, type: "text", name: name! } })
     setOptionsState(options.filter((opt) => !values.includes(opt.value)))
+    setIsOpen(false)
   }
 
   const handleClearOption = (key: string) => {

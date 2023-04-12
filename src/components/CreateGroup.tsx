@@ -5,13 +5,9 @@ import { MultiSelect } from "./select"
 import { Input, Textarea } from "./field"
 import { ModalAction } from "./modal/ModalAction"
 import { SERVER_CHANNELS } from "../utils/constants"
-import {
-  type TextareaChangeEvent,
-  type InputChangeEvent,
-  type MultiSelectChangeEvent,
-} from "../utils/types"
 import { useChatContext } from "../store/ChatStore"
 import { usersOptionsAdapter } from "../utils/functions"
+import { useForm } from "../hooks/useForm"
 
 const INIT_FORM_STATE = {
   name: "",
@@ -28,44 +24,26 @@ const INIT_ERROR_STATE = {
 export const CreateGroup = () => {
   const { connection, loggedUser, usersList } = useChatContext()
   const [isOpen, setIsOpen] = useState(false)
-  const [{ description, name, users }, setForm] = useState(INIT_FORM_STATE)
-  const [errors, setErrors] = useState(INIT_ERROR_STATE)
+  const { handleChange, errors, isFormValid, resetForm, description, name, users } =
+    useForm({
+      initialValues: INIT_FORM_STATE,
+      initialErrors: INIT_ERROR_STATE,
+    })
 
-  const handleChange = (
-    e: InputChangeEvent | MultiSelectChangeEvent | TextareaChangeEvent
-  ) => {
-    const value = e.target.value
-    const name = e.target.name
-    setForm((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }))
-  }
   const handleOpen = () => {
     setIsOpen(true)
   }
   const handleReset = () => {
     setIsOpen(false)
-    setErrors(INIT_ERROR_STATE)
-    setForm(INIT_FORM_STATE)
+    resetForm()
   }
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
 
-    const haveEmptyField = Object.values({ description, name, users }).some(
-      (value) => value === ""
-    )
-
-    if (haveEmptyField) {
-      setErrors({
-        description: description === "" ? "Obligatorio" : "",
-        name: name === "" ? "Obligatorio" : "",
-        users: users.length === 0 ? "Obligatorio" : "",
-      })
-      return
-    }
-
     if (connection === null) return
+
+    if (!isFormValid()) return
+
     connection.emit(SERVER_CHANNELS["create-chat"], {
       description,
       users,

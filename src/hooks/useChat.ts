@@ -21,9 +21,7 @@ export function useChat() {
   }, [loggedUser, usersList, connection])
 
   const notReadedMessages: NotReadedMessagesProps = useMemo(() => {
-    const notReaded = chats
-      .filter((chat) => chat.notReadedMessages > 0)
-      .reduce((acc, cur) => acc + cur.notReadedMessages, 0)
+    const notReaded = chats.reduce((acc, cur) => acc + cur.notReadedMessages, 0)
     return {
       total: notReaded,
       normalized: notReaded > 99 ? "+99" : notReaded.toString(),
@@ -44,7 +42,7 @@ export function useChat() {
     setChats((prevState) =>
       prevState.map((item) => ({
         ...item,
-        notReadedMessages: chat.id === item.id ? 0 : item.notReadedMessages,
+        notReadedMessages: chat.uid === item.uid ? 0 : item.notReadedMessages,
       }))
     )
     connection.emit(SERVER_CHANNELS["join-room"], {
@@ -56,20 +54,9 @@ export function useChat() {
   // ? efecto para almacenar la data de los chats/grupos
   useEffect(() => {
     if (connection === null) return
-    let notReaded: NotReadedMessages | null = null
-
-    connection.on(CLIENT_CHANNELS["new-messages"], (data: NotReadedMessages) => {
-      notReaded = data
-    })
 
     connection.on(CLIENT_CHANNELS.chats, (data: IChat[]) => {
-      setChats(
-        data.map((item) => ({
-          ...item,
-          notReadedMessages:
-            item.uid === notReaded?.uid ? notReaded?.quantity : item.notReadedMessages,
-        }))
-      )
+      setChats(data)
     })
 
     return () => {
@@ -88,6 +75,22 @@ export function useChat() {
     return () => {
       setMessages([])
     }
+  }, [connection])
+
+  useEffect(() => {
+    if (connection === null) return
+    connection.on(
+      CLIENT_CHANNELS["new-messages"],
+      ({ notReadedMessages }: { notReadedMessages: NotReadedMessages }) => {
+        const { quantity, uid } = notReadedMessages
+        setChats((prevChats) =>
+          prevChats.map(({ notReadedMessages, ...item }) => ({
+            ...item,
+            notReadedMessages: uid === item.uid ? quantity : notReadedMessages,
+          }))
+        )
+      }
+    )
   }, [connection])
 
   return {

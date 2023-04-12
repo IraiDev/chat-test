@@ -75,7 +75,9 @@ export function SelectDropdown({
                 </li>
               ))}
             {items.length === 0 && (
-              <li className="px-1 py-2 text-neutral-300">No hay opciones...</li>
+              <li className="px-1 py-2 text-neutral-600 dark:text-neutral-400">
+                No hay opciones...
+              </li>
             )}
           </ul>
         </animated.div>

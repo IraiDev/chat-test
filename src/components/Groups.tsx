@@ -1,8 +1,10 @@
-import React, { useState } from "react"
+import React, { useState, useEffect, useRef } from "react"
+import { isEqual } from "lodash"
 import { useTransition, animated } from "@react-spring/web"
 import { CreateGroup } from "./CreateGroup"
 import { GroupItem } from "./GroupItem"
 import { type IChat } from "../models/chat.model"
+import { useChatContext } from "../store/ChatStore"
 
 interface Props {
   chats: IChat[]
@@ -12,6 +14,8 @@ interface Props {
 }
 
 export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
+  const { loggedUser } = useChatContext()
+  const lastLoggedUser = useRef(loggedUser)
   const [activeChatUid, setActiveChatUid] = useState("")
   const transition = useTransition(isOpen, {
     from: { left: "0", transform: "translateX(-100%)" },
@@ -23,6 +27,12 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
     setActiveChatUid(chat.uid)
     onClose(false)
   }
+
+  useEffect(() => {
+    if (isEqual(loggedUser, lastLoggedUser.current)) return
+    setActiveChatUid("")
+    lastLoggedUser.current = loggedUser
+  }, [loggedUser])
 
   return transition(
     (style, item) =>
