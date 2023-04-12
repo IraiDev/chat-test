@@ -27,7 +27,10 @@ export const MessageWrapper = ({ messages = [] }: Props) => {
   return (
     <section
       ref={containerRef}
-      className="w-80 sm:w-96 p-2 px-4 bg-neutral-200 dark:bg-neutral-900/70 h-[400px] scroll-app"
+      className="
+      w-80 sm:w-96 p-2 px-4 h-[400px] sm:h-[500px] scroll-app bg-cover
+      bg-[url('./bg-wsp-light.jpg')] dark:bg-[url('./bg-wsp-dark.jpg')]
+    "
     >
       <ul className="flex flex-col gap-2.5 w-full">
         {messages.map(({ id, message, dateTimeSent, userId }) => (

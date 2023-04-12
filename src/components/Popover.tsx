@@ -22,8 +22,7 @@ export const Popover = ({ btnComponent, children, isOpen }: Props) => {
           item && (
             <animated.main
               style={style}
-              className="bg-neutral-50 dark:bg-neutral-800 border 
-              border-neutral-50 dark:border-neutral-800 rounded-xl 
+              className="bg-neutral-50 dark:bg-neutral-800 rounded-xl 
               overflow-hidden flex flex-col absolute bottom-[120%] 
               left-4 w-max shadow-xl origin-bottom-left"
             >

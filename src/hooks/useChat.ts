@@ -9,10 +9,16 @@ import {
 } from "../models/chat.model"
 
 export function useChat() {
-  const { connection, loggedUser } = useChatContext()
+  const { connection, loggedUser, usersList } = useChatContext()
   const [chats, setChats] = useState<IChat[]>([])
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null)
   const [messages, setMessages] = useState<IMessage[]>([])
+  const [isChatOpen, setIsChatOpen] = useState(true)
+  const [isGroupOpen, setIsGroupOpen] = useState(true)
+
+  const showChatBubble = useMemo(() => {
+    return loggedUser !== null && usersList.length > 0 && connection !== null
+  }, [loggedUser, usersList, connection])
 
   const notReadedMessages: NotReadedMessagesProps = useMemo(() => {
     const notReaded = chats
@@ -23,6 +29,13 @@ export function useChat() {
       normalized: notReaded > 99 ? "+99" : notReaded.toString(),
     }
   }, [chats])
+
+  const handleOpenChat = () => {
+    setIsChatOpen((prevValue) => !prevValue)
+  }
+  const handleOpenGroup = () => {
+    setIsGroupOpen((prevValue) => !prevValue)
+  }
 
   // ? funcion que captura el chat seleccionado
   const handleSelectChat = (chat: IChat) => {
@@ -82,6 +95,12 @@ export function useChat() {
     messages,
     selectedChat,
     notReadedMessages,
+    isChatOpen,
+    isGroupOpen,
+    showChatBubble,
     handleSelectChat,
+    handleOpenChat,
+    handleOpenGroup,
+    setIsGroupOpen,
   }
 }

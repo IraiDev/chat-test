@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React from "react"
 import { Popover } from "./Popover"
 import { AiOutlineMessage } from "react-icons/ai"
 import { ChatHeader } from "./ChatHeader"
@@ -6,8 +6,6 @@ import { MessageWrapper } from "./MessageWrapper"
 import { MessageSender } from "./MessageSender"
 import { Groups } from "./Groups"
 import { useChat } from "../hooks/useChat"
-import { useChatContext } from "../store/ChatStore"
-import { CLIENT_CHANNELS } from "../utils/constants"
 import { type NotReadedMessagesProps } from "../models/chat.model"
 
 interface BtnProps {
@@ -21,29 +19,19 @@ interface Props {
 }
 
 export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
-  const { loggedUser, usersList } = useChatContext()
-  const { connection } = useChatContext()
-  const [isChatOpen, setIsChatOpen] = useState(false)
-  const [isGroupOpen, setIsGroupOpen] = useState(false)
-  const { selectedChat, messages, chats, notReadedMessages, handleSelectChat } = useChat()
-
-  const showChatBubble = useMemo(() => {
-    return loggedUser !== null && usersList.length > 0 && connection !== null
-  }, [loggedUser, usersList, connection])
-
-  const handleOpenChat = () => {
-    setIsChatOpen((prevValue) => !prevValue)
-  }
-  const handleOpenGroup = () => {
-    setIsGroupOpen((prevValue) => !prevValue)
-  }
-
-  useEffect(() => {
-    if (connection === null) return
-    connection.on(CLIENT_CHANNELS.error, (data) => {
-      console.log(data)
-    })
-  }, [connection])
+  const {
+    selectedChat,
+    messages,
+    chats,
+    notReadedMessages,
+    isChatOpen,
+    isGroupOpen,
+    showChatBubble,
+    handleOpenChat,
+    handleOpenGroup,
+    handleSelectChat,
+    setIsGroupOpen,
+  } = useChat()
 
   if (!showChatBubble || hidden) return null
 
@@ -55,6 +43,7 @@ export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
       }
     >
       <ChatHeader
+        isGroupOpen={isGroupOpen}
         chatName={selectedChat?.name ?? defaultChatName}
         showGroup={handleOpenGroup}
       />

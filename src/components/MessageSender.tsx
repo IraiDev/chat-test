@@ -54,8 +54,7 @@ export const MessageSender = ({ chatUid }: Props) => {
     sendMessage()
   }
 
-  if (chatUid === "")
-    return <footer className="h-[70px] bg-neutral-200 dark:bg-neutral-900/70" />
+  if (chatUid === "") return <footer className="h-[70px]" />
 
   return (
     <footer className="p-2">

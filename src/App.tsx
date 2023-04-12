@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useLayoutEffect, useState } from "react"
 import { ChatBubble } from "./components/ChatBubble"
-import { type IUser } from "./models/user.model"
 import { useChatConnection } from "./hooks"
+import { type IUser } from "./models/user.model"
 
+const DOC_ELEMENT = document.documentElement.classList
 export const USERS: IUser[] = [
   {
     id: 290,
@@ -18,7 +19,25 @@ export const USERS: IUser[] = [
   },
 ]
 
+function useDarkMode() {
+  const [isDarkModeActive, setIsDarkModeActive] = useState(DOC_ELEMENT.contains("dark"))
+
+  const handleToggleDarkMode = () => {
+    setIsDarkModeActive(!isDarkModeActive)
+  }
+
+  useLayoutEffect(() => {
+    isDarkModeActive ? DOC_ELEMENT.add("dark") : DOC_ELEMENT.remove("dark")
+  }, [isDarkModeActive])
+
+  return {
+    isDarkModeActive,
+    handleToggleDarkMode,
+  }
+}
+
 const App = () => {
+  const { handleToggleDarkMode, isDarkModeActive } = useDarkMode()
   const { signIn, signOut, loggedUser } = useChatConnection({
     url: "https://chat.zpruebas.cl",
     users: USERS,
@@ -30,7 +49,6 @@ const App = () => {
       dark:bg-neutral-900 text-neutral-800 dark:text-neutral-50"
     >
       <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg shadow-lg">
-        <button onClick={signOut}>Cerrar session</button>
         <ul className="space-y-2">
           {USERS.map((user) => (
             <li
@@ -48,9 +66,25 @@ const App = () => {
             </li>
           ))}
         </ul>
+        {loggedUser !== null && (
+          <button
+            className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 mt-5"
+            onClick={signOut}
+          >
+            Cerrar session
+          </button>
+        )}
       </div>
 
       <ChatBubble hidden={false} defaultChatName="BCN Chat" />
+
+      <button
+        onClick={handleToggleDarkMode}
+        className="fixed bottom-5 right-5 dark:bg-neutral-50 dark:hover:bg-neutral-200 font-semibold
+        dark:text-neutral-800 text-neutral-50 bg-neutral-800 hover:bg-neutral-700 px-3 py-1.5"
+      >
+        {isDarkModeActive ? "Light mode" : "Dark mode"}
+      </button>
     </main>
   )
 }

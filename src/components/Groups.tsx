@@ -1,14 +1,8 @@
-import React, { useMemo } from "react"
-import { HiUserGroup } from "react-icons/hi"
+import React, { useState } from "react"
 import { useTransition, animated } from "@react-spring/web"
 import { CreateGroup } from "./CreateGroup"
+import { GroupItem } from "./GroupItem"
 import { type IChat } from "../models/chat.model"
-
-interface ItemProps {
-  groupName: string
-  onClick: () => void
-  notReadedMessages: number
-}
 
 interface Props {
   chats: IChat[]
@@ -18,6 +12,7 @@ interface Props {
 }
 
 export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
+  const [activeChatUid, setActiveChatUid] = useState("")
   const transition = useTransition(isOpen, {
     from: { left: "0", transform: "translateX(-100%)" },
     enter: { left: "0", transform: "translateX(0px)" },
@@ -25,6 +20,7 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
   })
   const handleClick = (chat: IChat) => {
     onSelectChat(chat)
+    setActiveChatUid(chat.uid)
     onClose(false)
   }
 
@@ -49,6 +45,7 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
               {chats.map((chat) => (
                 <GroupItem
                   key={chat.id}
+                  isActive={activeChatUid === chat.uid}
                   groupName={chat.name}
                   notReadedMessages={chat.notReadedMessages}
                   onClick={() => {
@@ -60,32 +57,5 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
           </section>
         </animated.div>
       )
-  )
-}
-
-const GroupItem = ({ groupName, onClick, notReadedMessages }: ItemProps) => {
-  const notReadedMessagesNormalized = useMemo(() => {
-    return notReadedMessages > 99 ? "+99" : notReadedMessages
-  }, [notReadedMessages])
-
-  return (
-    <li
-      onClick={onClick}
-      className="flex items-center gap-2 w-full p-2 hover:bg-neutral-200
-      dark:hover:bg-neutral-700 transition-colors duration-200 cursor-pointer"
-    >
-      <picture className="rounded-full h-8 min-w-[32px] grid place-content-center bg-neutral-300">
-        <HiUserGroup className="text-xl text-neutral-600" />
-      </picture>
-      <span className="block max-w-[85%] truncate">{groupName}</span>
-      {notReadedMessages > 0 && (
-        <span
-          className="bg-red-500 rounded-full h-[18px] min-w-[18px] text-white grid 
-          place-content-center text-xs"
-        >
-          {notReadedMessagesNormalized}
-        </span>
-      )}
-    </li>
   )
 }

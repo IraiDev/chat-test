@@ -14,11 +14,11 @@ export const Message = ({ content, date, user, sendedByMe }: Props) => {
   return (
     <li
       className={`
-      rounded-lg p-2 px-3 max-w-[90%] w-max relative
+      rounded-lg p-2 px-3 max-w-[90%] w-max relative shadow-lg
       ${
         sendedByMe
-          ? "bg-emerald-600 self-end text-white shadow-lg"
-          : "bg-neutral-50 dark:bg-neutral-700 shadow-md"
+          ? "bg-emerald-700 self-end text-white"
+          : "bg-emerald-100 dark:bg-neutral-800 border-b dark:border-none"
       }
     `}
     >
@@ -46,8 +46,8 @@ export const Message = ({ content, date, user, sendedByMe }: Props) => {
         h-3 w-3 rounded bottom-1.5 absolute rotate-45 
         ${
           sendedByMe
-            ? "-right-1 bg-emerald-600"
-            : "-left-1 bg-neutral-50 dark:bg-neutral-700"
+            ? "-right-1 bg-emerald-700"
+            : "-left-1 bg-emerald-100 dark:bg-neutral-800"
         }
       `}
       />
