@@ -45,7 +45,7 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
         >
           <header className="mb-2 px-2 flex items-center justify-between gap-2">
             <h3 className="font-semibold text-lg">Grupos</h3>
-            <CreateGroup />
+            {loggedUser?.cantCreateGroup && <CreateGroup />}
           </header>
           <section>
             <ul

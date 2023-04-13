@@ -10,12 +10,14 @@ export const USERS: IUser[] = [
     name: "Ignacio A.",
     token:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImlhcnJpYWdhZGEiLCJ1c2VySWQiOiIyOTAiLCJlbnRlcnByaXNlSWQiOiIxIiwiaWF0IjoxNjgwNTM3NzUwfQ.oryFS6JMdh2FE8iMKzFUyb5DleYofp67Fzqo24dOn-o",
+    cantCreateGroup: true,
   },
   {
     id: 213,
     name: "Sebastian A.",
     token:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNhY3VuYSIsInVzZXJJZCI6IjIxMyIsImVudGVycHJpc2VJZCI6IjEiLCJpYXQiOjE2ODA4MDMyNDJ9.ptViEPL9zOh16fUPkoOU68-T0b5CK07LiAg8mKkDyaM",
+    cantCreateGroup: false,
   },
 ]
 
@@ -59,7 +61,7 @@ const App = () => {
         )}
       </div>
 
-      <ChatBubble hidden={false} defaultChatName="BCN Chat" />
+      <ChatBubble hidden defaultChatName="BCN Chat" />
 
       <button
         onClick={handleToggleDarkMode}

@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { DOC_ELEMENT } from "../utils/constants"
+// import { DOC_ELEMENT } from "../utils/constants"
 
 interface Store {
   isDarkModeActive: boolean
@@ -7,7 +7,7 @@ interface Store {
 }
 
 export const useDarkModeContext = create<Store>((set) => ({
-  isDarkModeActive: DOC_ELEMENT.contains("dark"),
+  isDarkModeActive: false,
   setIsDarkModeActive: (value) => {
     set(() => ({ isDarkModeActive: value }))
   },

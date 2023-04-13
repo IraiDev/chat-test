@@ -14,7 +14,7 @@ interface BtnProps {
 }
 
 interface Props {
-  hidden: boolean
+  hidden?: boolean
   defaultChatName?: string
 }
 
@@ -31,7 +31,7 @@ export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
     handleOpenGroup,
     handleSelectChat,
     setIsGroupOpen,
-  } = useChat()
+  } = useChat({ hidden })
 
   if (!showChatBubble || hidden) return null
 
