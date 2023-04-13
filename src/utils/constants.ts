@@ -1,3 +1,7 @@
+export const DOC_ELEMENT = document.documentElement.classList
+export const DARK_MODE = "dark"
+export const LIGHT_MODE = "light"
+
 export const CLIENT_CHANNELS = {
   chats: "client:chatLists",
   messages: "client:messages",

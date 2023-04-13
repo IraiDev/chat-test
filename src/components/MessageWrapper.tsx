@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useRef } from "react"
 import { Message } from "./Message"
 import { useChatContext } from "../store/ChatStore"
 import { type IMessage } from "../models/chat.model"
+import { useDarkMode } from "../hooks/useDarkMode"
 
 interface Props {
   messages: IMessage[]
@@ -11,6 +12,7 @@ export const MessageWrapper = ({ messages = [] }: Props) => {
   const isFirstLoad = useRef(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const { loggedUser } = useChatContext()
+  const { isDarkModeActive } = useDarkMode()
 
   useLayoutEffect(() => {
     const container = containerRef.current
@@ -27,9 +29,13 @@ export const MessageWrapper = ({ messages = [] }: Props) => {
   return (
     <section
       ref={containerRef}
+      style={{
+        backgroundImage: isDarkModeActive
+          ? "url('https://assets.zproduccion.cl/chat/bg-wsp-dark.jpg')"
+          : "url('https://assets.zproduccion.cl/chat/bg-wsp-light.jpg')",
+      }}
       className="
-      w-80 sm:w-96 p-2 px-4 h-[400px] sm:h-[500px] scroll-app bg-cover
-      bg-[url('./bg-wsp-light.jpg')] dark:bg-[url('./bg-wsp-dark.jpg')]"
+      w-80 sm:w-96 p-2 px-4 h-[400px] sm:h-[500px] scroll-app bg-cover"
     >
       <ul className="flex flex-col gap-2.5 w-full">
         {messages.map(({ id, message, dateTimeSent, userId }) => (

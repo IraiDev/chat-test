@@ -1,9 +1,9 @@
-import React, { useLayoutEffect, useState } from "react"
+import React from "react"
 import { ChatBubble } from "./components/ChatBubble"
 import { useChatConnection } from "./hooks"
 import { type IUser } from "./models/user.model"
+import { useDarkMode } from "./hooks/useDarkMode"
 
-const DOC_ELEMENT = document.documentElement.classList
 export const USERS: IUser[] = [
   {
     id: 290,
@@ -18,23 +18,6 @@ export const USERS: IUser[] = [
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNhY3VuYSIsInVzZXJJZCI6IjIxMyIsImVudGVycHJpc2VJZCI6IjEiLCJpYXQiOjE2ODA4MDMyNDJ9.ptViEPL9zOh16fUPkoOU68-T0b5CK07LiAg8mKkDyaM",
   },
 ]
-
-function useDarkMode() {
-  const [isDarkModeActive, setIsDarkModeActive] = useState(DOC_ELEMENT.contains("dark"))
-
-  const handleToggleDarkMode = () => {
-    setIsDarkModeActive(!isDarkModeActive)
-  }
-
-  useLayoutEffect(() => {
-    isDarkModeActive ? DOC_ELEMENT.add("dark") : DOC_ELEMENT.remove("dark")
-  }, [isDarkModeActive])
-
-  return {
-    isDarkModeActive,
-    handleToggleDarkMode,
-  }
-}
 
 const App = () => {
   const { handleToggleDarkMode, isDarkModeActive } = useDarkMode()
