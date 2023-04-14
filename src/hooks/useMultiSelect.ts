@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react"
 import { type MultiSelectProps, type SelectOption } from "../utils/types"
+import { uniq } from "lodash"
 
 type Props = Pick<
   MultiSelectProps,
@@ -28,9 +29,8 @@ export function useMultiSelect({
   }
 
   const handleSelectOption = (option: SelectOption) => {
-    const values: string[] = [
-      ...new Set([...(value !== undefined ? value : selectValue), option.value]),
-    ]
+    const arr = [...selectValue, ...value, option.value]
+    const values: string[] = uniq(arr)
     setInputValue("")
     setSelectValue(values)
     onChange?.({ target: { value: values, type: "text", name: name! } })
@@ -39,7 +39,8 @@ export function useMultiSelect({
   }
 
   const handleClearOption = (key: string) => {
-    const values: string[] = [...value, ...selectValue].filter((item) => item !== key)
+    const arr = [...selectValue, ...value]
+    const values: string[] = uniq(arr).filter((item) => item !== key)
     onChange?.({ target: { value: values, type: "text", name: name! } })
     setOptionsState(options.filter((opt) => !values.includes(opt.value)))
     setInputValue("")
