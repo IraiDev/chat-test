@@ -79,7 +79,7 @@ const App = () => {
   const { handleToggleDarkMode, isDarkModeActive } = useDarkMode()
   const { signIn, loggedUser, signOut } = useChatConnection({
     url: "https://chat.zpruebas.cl",
-    users: [],
+    users: USERS,
   })
 
   return (
