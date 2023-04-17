@@ -16,7 +16,8 @@ interface Props {
 }
 
 export const MessageSender = ({ chatUid }: Props) => {
-  const { connection, loggedUser, fieldSenderMessageDuration } = useChatContext()
+  const { connection, loggedUser, fieldSenderMessageDuration, isConnected } =
+    useChatContext()
   const [message, setMessage] = useState(localStorage.getItem(chatUid) ?? "")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -86,7 +87,7 @@ export const MessageSender = ({ chatUid }: Props) => {
         border border-neutral-300 dark:border-neutral-600"
       >
         <textarea
-          disabled={chatUid === ""}
+          disabled={chatUid === "" || !isConnected}
           name="message"
           autoComplete="off"
           rows={1}
@@ -99,7 +100,7 @@ export const MessageSender = ({ chatUid }: Props) => {
           transition duration-200 scroll-app h-auto resize-none disabled:hover:ring-transparent"
         ></textarea>
         <button
-          disabled={message === ""}
+          disabled={message === "" || !isConnected}
           type="submit"
           className="min-w-[36px] h-9 grid place-content-center bg-emerald-600 
           hover:bg-emerald-500 text-white transition duration-200 outline-none

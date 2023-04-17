@@ -114,7 +114,7 @@ export const ChatEditor = ({ chat }: Props) => {
           className="divide-y divide-neutral-300 dark:divide-neutral-600"
         >
           <section className="p-3 py-5 space-y-3 min-w-full">
-            <h5>
+            <h5 className="text-neutral-800 dark:text-neutral-50">
               <strong className="mr-2">Grupo:</strong>
               {chat.name}
             </h5>

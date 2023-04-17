@@ -44,7 +44,7 @@ export const ChatDeleter = ({ chat }: Props) => {
 
       <Modal title="Eliminar Grupo" isOpen={isOpen} onClose={handleClose}>
         <section className="p-3">
-          <p className="text-sm whitespace-pre-wrap break-words">
+          <p className="text-sm whitespace-pre-wrap break-words dark:text-neutral-50 text-neutral-800">
             ¿Esta seguro de eliminar el grupo <strong>{chat.name}</strong>?
           </p>
         </section>

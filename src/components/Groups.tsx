@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react"
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react"
 import { isEqual } from "lodash"
 import { useTransition, animated } from "@react-spring/web"
 import { CreateGroup } from "./CreateGroup"
@@ -14,7 +14,7 @@ interface Props {
 }
 
 export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
-  const { loggedUser } = useChatContext()
+  const { loggedUser, isConnected } = useChatContext()
   const lastLoggedUser = useRef(loggedUser)
   const [activeChatUid, setActiveChatUid] = useState("")
   const transition = useTransition(isOpen, {
@@ -33,6 +33,11 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
     setActiveChatUid("")
     lastLoggedUser.current = loggedUser
   }, [loggedUser])
+
+  useLayoutEffect(() => {
+    if (isConnected) return
+    onClose(false)
+  }, [isConnected])
 
   return transition(
     (style, item) =>

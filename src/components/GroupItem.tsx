@@ -39,7 +39,7 @@ export const GroupItem = ({ onClick, isActive, chat }: ItemProps) => {
       <Notify hidden={chat.notReadedMessages === 0}>{notReadedMessagesNormalized}</Notify>
       <div className="flex-1" />
       {loggedUser?.cantCreateGroup && (
-        <div className="flex items-center h-full">
+        <div className="flex items-center h-full text-neutral-500">
           <ChatEditor chat={chat} />
           <ChatDeleter chat={chat} />
         </div>

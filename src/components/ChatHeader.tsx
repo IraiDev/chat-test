@@ -16,7 +16,7 @@ export const ChatHeader = ({ chatName, showGroup, isGroupOpen }: Props) => {
   return (
     <header
       className="px-2 py-6 bg-neutral-50 dark:bg-neutral-800 flex shadow-md
-      items-center gap-2 z-20"
+      items-center gap-2 z-50"
     >
       <TogglerBtn isGroupOpen={isGroupOpen} showGroup={showGroup} />
       <ChatAvatar />
@@ -32,11 +32,13 @@ const TogglerBtn = ({
   isGroupOpen: idGroupOpen,
   showGroup,
 }: Pick<Props, "isGroupOpen" | "showGroup">) => {
+  const { isConnected } = useChatContext()
   return (
     <button
+      disabled={!isConnected}
       onClick={showGroup}
       className="h-8 w-8 grid place-content-center text-xl rounded-full 
-      bg-transparent trnasition duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 outline-none"
+      bg-transparent trnasition duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 outline-none disabled:hover:bg-transparent dark:disabled:hover:bg-transparent"
     >
       <RiMenuFoldLine
         className={`

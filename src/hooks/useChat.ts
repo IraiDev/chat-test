@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useState, useRef } from "react"
 import { CLIENT_CHANNELS, SERVER_CHANNELS } from "../utils/constants"
 import { useChatContext } from "../store/ChatStore"
 import {
@@ -22,6 +22,7 @@ export function useChat({ hidden }: Props) {
   const [messages, setMessages] = useState<IMessage[]>([])
   const [isChatOpen, setIsChatOpen] = useState(false)
   const [isGroupOpen, setIsGroupOpen] = useState(true)
+  const prevSelectedChat = useRef<IChat | null>(selectedChat)
 
   const showChatBubble = useMemo(() => {
     return loggedUser !== null && usersList.length > 0 && connection !== null && !hidden
@@ -38,15 +39,20 @@ export function useChat({ hidden }: Props) {
   const handleToggleChat = () => {
     if (connection === null) return
     setIsChatOpen((prevValue) => {
-      if (prevValue && selectedChat !== null) {
-        connection.emit(
-          SERVER_CHANNELS["leave-room"],
-          { uidChat: selectedChat?.uid, token: loggedUser?.token },
-          (error: SocketError) => {
-            console.log(error)
-          }
-        )
-      }
+      if (selectedChat === null) return !prevValue
+      connection.emit(
+        prevValue ? SERVER_CHANNELS["leave-room"] : SERVER_CHANNELS["join-room"],
+        { uidChat: selectedChat?.uid, token: loggedUser?.token },
+        (error: SocketError) => {
+          console.log(error)
+        }
+      )
+      setChats((prevState) =>
+        prevState.map((item) => ({
+          ...item,
+          notReadedMessages: selectedChat.uid === item.uid ? 0 : item.notReadedMessages,
+        }))
+      )
       return !prevValue
     })
   }
@@ -57,13 +63,21 @@ export function useChat({ hidden }: Props) {
   // ? funcion que captura el chat seleccionado
   const handleSelectChat = (chat: IChat) => {
     if (connection === null || loggedUser === null) return
-    setSelectedChat(chat)
-    setChats((prevState) =>
-      prevState.map((item) => ({
-        ...item,
-        notReadedMessages: chat.uid === item.uid ? 0 : item.notReadedMessages,
-      }))
-    )
+
+    if (prevSelectedChat.current !== null) {
+      const { uid } = prevSelectedChat.current
+      connection.emit(
+        SERVER_CHANNELS["leave-room"],
+        {
+          uidChat: uid,
+          token: loggedUser.token,
+        },
+        ({ ok, message }: SocketError) => {
+          console.log({ ok, message })
+        }
+      )
+    }
+
     connection.emit(
       SERVER_CHANNELS["join-room"],
       {
@@ -73,6 +87,15 @@ export function useChat({ hidden }: Props) {
       ({ ok, message }: SocketError) => {
         console.log({ ok, message })
       }
+    )
+
+    setSelectedChat(chat)
+    prevSelectedChat.current = chat
+    setChats((prevState) =>
+      prevState.map((item) => ({
+        ...item,
+        notReadedMessages: chat.uid === item.uid ? 0 : item.notReadedMessages,
+      }))
     )
   }
 
@@ -87,6 +110,7 @@ export function useChat({ hidden }: Props) {
     return () => {
       setChats([])
       setSelectedChat(null)
+      prevSelectedChat.current = null
     }
   }, [connection])
 
@@ -106,7 +130,7 @@ export function useChat({ hidden }: Props) {
     }
   }, [connection, selectedChat])
 
-  // ? efecto para cheackar nuevos mensajes sin leer
+  // ? efecto para checkear nuevos mensajes sin leer
   useEffect(() => {
     if (!showChatBubble) return
     connection?.on(
@@ -123,6 +147,7 @@ export function useChat({ hidden }: Props) {
     )
   }, [connection])
 
+  // ? efecto encargado de escuachar la desconexion del chat
   useEffect(() => {
     if (connection === null) return
     connection.on(
