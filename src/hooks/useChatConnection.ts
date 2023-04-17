@@ -16,11 +16,11 @@ export function useChatConnection(props: Partial<Props> = {}) {
   const { loadUsers, clearUsers } = useChatContext()
   const renderCountForUsersEqualsToZero = useRef(0)
 
-  if (props.url === undefined) {
+  if (props.url === undefined && connection === null) {
     throw new Error("Es necesraio proveer una URL para la conexion al socket del chat")
   }
 
-  if (props.users === undefined) {
+  if (props.users === undefined && connection === null) {
     throw new Error("Es necesraio proveer USUARIOS para el uso del chat")
   }
 

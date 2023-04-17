@@ -77,9 +77,9 @@ export const USERS: IUser[] = formatUsers(users)
 
 const App = () => {
   const { handleToggleDarkMode, isDarkModeActive } = useDarkMode()
-  const { signIn, signOut, loggedUser } = useChatConnection({
+  const { signIn, loggedUser, signOut } = useChatConnection({
     url: "https://chat.zpruebas.cl",
-    users: USERS,
+    users: [],
   })
 
   return (
