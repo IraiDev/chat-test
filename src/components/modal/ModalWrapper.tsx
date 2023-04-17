@@ -1,6 +1,6 @@
 import React from "react"
 import { useTransition, animated } from "@react-spring/web"
-import { type ModalProps } from "./Modal"
+import { ModalProps } from "./Modal"
 
 interface Props extends Pick<ModalProps, "children" | "isOpen"> {
   maxWidth: string

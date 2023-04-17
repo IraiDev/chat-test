@@ -1,4 +1,9 @@
-import { type VARIANTS, type FILLED_COLORS, type TEXT_SIZES } from "./styles"
+import { VARIANTS, type FILLED_COLORS, type TEXT_SIZES } from "./styles"
+
+interface SocketError {
+  ok: boolean
+  message: string
+}
 
 type ChangeEvent<El> = React.ChangeEvent<El>
 interface OptionsRef {

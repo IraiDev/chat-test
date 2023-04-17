@@ -2,18 +2,21 @@ import { useEffect, useMemo, useState } from "react"
 import { CLIENT_CHANNELS, SERVER_CHANNELS } from "../utils/constants"
 import { useChatContext } from "../store/ChatStore"
 import {
-  type NotReadedMessagesProps,
-  type IChat,
-  type IMessage,
-  type NotReadedMessages,
+  NotReadedMessagesProps,
+  IChat,
+  IMessage,
+  NotReadedMessages,
+  ChatDisconnected,
 } from "../models/chat.model"
+import { SocketError } from "../utils/types"
 
 interface Props {
   hidden?: boolean
 }
 
 export function useChat({ hidden }: Props) {
-  const { connection, loggedUser, usersList } = useChatContext()
+  const { connection, loggedUser, usersList, isConnected, setIsConnected } =
+    useChatContext()
   const [chats, setChats] = useState<IChat[]>([])
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null)
   const [messages, setMessages] = useState<IMessage[]>([])
@@ -32,8 +35,20 @@ export function useChat({ hidden }: Props) {
     }
   }, [chats])
 
-  const handleOpenChat = () => {
-    setIsChatOpen((prevValue) => !prevValue)
+  const handleToggleChat = () => {
+    if (connection === null) return
+    setIsChatOpen((prevValue) => {
+      if (prevValue && selectedChat !== null) {
+        connection.emit(
+          SERVER_CHANNELS["leave-room"],
+          { uidChat: selectedChat?.uid, token: loggedUser?.token },
+          (error: SocketError) => {
+            console.log(error)
+          }
+        )
+      }
+      return !prevValue
+    })
   }
   const handleOpenGroup = () => {
     setIsGroupOpen((prevValue) => !prevValue)
@@ -49,19 +64,26 @@ export function useChat({ hidden }: Props) {
         notReadedMessages: chat.uid === item.uid ? 0 : item.notReadedMessages,
       }))
     )
-    connection.emit(SERVER_CHANNELS["join-room"], {
-      uidChat: chat.uid,
-      token: loggedUser.token,
-    })
+    connection.emit(
+      SERVER_CHANNELS["join-room"],
+      {
+        uidChat: chat.uid,
+        token: loggedUser.token,
+      },
+      ({ ok, message }: SocketError) => {
+        console.log({ ok, message })
+      }
+    )
   }
 
   // ? efecto para almacenar la data de los chats/grupos
   useEffect(() => {
     if (!showChatBubble) return
+
     connection?.on(CLIENT_CHANNELS.chats, (data: IChat[]) => {
+      setSelectedChat((prevState) => data.find((el) => el.uid === prevState?.uid) ?? null)
       setChats(data)
     })
-
     return () => {
       setChats([])
       setSelectedChat(null)
@@ -71,6 +93,10 @@ export function useChat({ hidden }: Props) {
   // ? efecto para almacenar la data de los mensajes del chat o grupo seleccionado
   useEffect(() => {
     if (!showChatBubble) return
+    if (selectedChat === null) {
+      setMessages([])
+      return
+    }
     connection?.on(CLIENT_CHANNELS.messages, (data: IMessage[]) => {
       setMessages(data)
     })
@@ -78,8 +104,9 @@ export function useChat({ hidden }: Props) {
     return () => {
       setMessages([])
     }
-  }, [connection])
+  }, [connection, selectedChat])
 
+  // ? efecto para cheackar nuevos mensajes sin leer
   useEffect(() => {
     if (!showChatBubble) return
     connection?.on(
@@ -96,16 +123,28 @@ export function useChat({ hidden }: Props) {
     )
   }, [connection])
 
+  useEffect(() => {
+    if (connection === null) return
+    connection.on(
+      CLIENT_CHANNELS.disconnected,
+      ({ connected, message }: ChatDisconnected) => {
+        setIsConnected(connected)
+        console.log({ connected, message })
+      }
+    )
+  }, [connection])
+
   return {
     chats,
     messages,
     selectedChat,
+    isConnected,
     notReadedMessages,
     isChatOpen,
     isGroupOpen,
     showChatBubble,
     handleSelectChat,
-    handleOpenChat,
+    handleToggleChat,
     handleOpenGroup,
     setIsGroupOpen,
   }

@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react"
-import { type MultiSelectProps, type SelectOption } from "../utils/types"
+import { MultiSelectProps, type SelectOption } from "../utils/types"
 import { uniq } from "lodash"
 
 type Props = Pick<

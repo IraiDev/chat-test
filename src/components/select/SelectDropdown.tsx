@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import { useTransition, animated } from "@react-spring/web"
 import { AvatarSelect } from "./AvatarSelect"
-import { type SelectOption } from "../../utils/types"
+import { SelectOption } from "../../utils/types"
 
 interface Props {
   isOpen: boolean

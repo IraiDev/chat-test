@@ -3,7 +3,7 @@ import { isEqual } from "lodash"
 import { useTransition, animated } from "@react-spring/web"
 import { CreateGroup } from "./CreateGroup"
 import { GroupItem } from "./GroupItem"
-import { type IChat } from "../models/chat.model"
+import { IChat } from "../models/chat.model"
 import { useChatContext } from "../store/ChatStore"
 
 interface Props {
@@ -56,8 +56,7 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
                 <GroupItem
                   key={chat.id}
                   isActive={activeChatUid === chat.uid}
-                  groupName={chat.name}
-                  notReadedMessages={chat.notReadedMessages}
+                  chat={chat}
                   onClick={() => {
                     handleClick(chat)
                   }}

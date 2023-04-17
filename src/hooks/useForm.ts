@@ -66,5 +66,6 @@ export const useForm = <V extends object, E extends object>({
     handleChange,
     isFormValid,
     resetForm,
+    setForm,
   }
 }

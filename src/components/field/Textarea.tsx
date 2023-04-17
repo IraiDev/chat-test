@@ -1,7 +1,7 @@
 import React, { useId } from "react"
 import { FieldHelper } from "./FieldHelper"
 import { FieldWrapper } from "./FieldWrapper"
-import { type TextareaProps } from "../../utils/types"
+import { TextareaProps } from "../../utils/types"
 
 export function Textarea(props: TextareaProps) {
   const {

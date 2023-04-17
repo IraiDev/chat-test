@@ -1,24 +1,24 @@
 import { create } from "zustand"
-import { type Socket } from "socket.io-client"
-import { type IUser, type LoggedUser } from "../models/user.model"
+import { Socket } from "socket.io-client"
+import { IUser, type LoggedUser } from "../models/user.model"
 
 interface Store {
-  // * control del estado de socket
+  isConnected: boolean
+  setIsConnected: (value: boolean) => void
   connection: Socket | null
   saveConnection: (socket: Socket) => void
   clearConnection: () => void
-  // ? control del estado del usuario del chat
   loggedUser: LoggedUser
   signIn: (user: LoggedUser) => void
   signOut: () => void
-  // ! control del estado de lista de usuarios
   usersList: IUser[]
   loadUsers: (users: IUser[]) => void
   clearUsers: () => void
+  fieldSenderMessageDuration: number
+  setFieldSenderMessageDuration: (value: number) => void
 }
 
 export const useChatContext = create<Store>((set) => ({
-  // * control del estado de socket
   connection: null,
   saveConnection: (socket) => {
     set(() => ({ connection: socket }))
@@ -26,20 +26,26 @@ export const useChatContext = create<Store>((set) => ({
   clearConnection: () => {
     set(() => ({ connection: null }))
   },
-  // ? control del estado del usuario del chat
   loggedUser: null,
   signIn: (user) => {
-    set(() => ({ loggedUser: user }))
+    set(() => ({ loggedUser: user, isConnected: user !== null }))
   },
   signOut: () => {
     set(() => ({ loggedUser: null }))
   },
-  // ! control del estado de lista de usuarios
   usersList: [],
   loadUsers: (users) => {
     set(() => ({ usersList: users }))
   },
   clearUsers: () => {
     set(() => ({ usersList: [] }))
+  },
+  fieldSenderMessageDuration: 3.6e6,
+  setFieldSenderMessageDuration: (value) => {
+    set(() => ({ fieldSenderMessageDuration: value }))
+  },
+  isConnected: false,
+  setIsConnected: (value) => {
+    set(() => ({ isConnected: value }))
   },
 }))

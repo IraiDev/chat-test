@@ -2,7 +2,7 @@ import React, { useId } from "react"
 import { FieldAdorment } from "./FieldAdorment"
 import { FieldHelper } from "./FieldHelper"
 import { FieldWrapper } from "./FieldWrapper"
-import { type InputProps } from "../../utils/types"
+import { InputProps } from "../../utils/types"
 
 interface Props extends InputProps {
   startAdorment?: React.ReactNode

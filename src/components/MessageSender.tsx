@@ -1,34 +1,43 @@
 import React, {
-  type ChangeEvent,
-  type FormEvent,
-  type KeyboardEvent,
+  ChangeEvent,
+  FormEvent,
+  KeyboardEvent,
   useRef,
   useState,
+  useEffect,
 } from "react"
 import { BsSendFill } from "react-icons/bs"
 import { SERVER_CHANNELS } from "../utils/constants"
 import { useChatContext } from "../store/ChatStore"
+import { SocketError } from "../utils/types"
 
 interface Props {
   chatUid: string
 }
 
 export const MessageSender = ({ chatUid }: Props) => {
-  const { connection, loggedUser } = useChatContext()
-  const [message, setMessage] = useState("")
+  const { connection, loggedUser, fieldSenderMessageDuration } = useChatContext()
+  const [message, setMessage] = useState(localStorage.getItem(chatUid) ?? "")
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const sendMessage = () => {
     if (textareaRef.current === null || connection === null || loggedUser === null) return
     if (message === "") return
 
-    connection.emit(SERVER_CHANNELS.messages, {
-      message,
-      token: loggedUser.token,
-      chatUid,
-    })
+    connection.emit(
+      SERVER_CHANNELS.messages,
+      {
+        message,
+        token: loggedUser.token,
+        chatUid,
+      },
+      ({ ok, message }: SocketError) => {
+        console.log({ ok, message })
+      }
+    )
 
     setMessage("")
+    localStorage.removeItem(chatUid)
     textareaRef.current.style.height = "auto"
   }
 
@@ -37,6 +46,7 @@ export const MessageSender = ({ chatUid }: Props) => {
     const scrollHeight = e.target.scrollHeight
     e.target.style.height = `${scrollHeight}px`
     setMessage(value)
+    localStorage.setItem(chatUid, value)
 
     if (value === "") {
       e.target.style.height = "auto"
@@ -53,6 +63,18 @@ export const MessageSender = ({ chatUid }: Props) => {
     e.preventDefault()
     sendMessage()
   }
+
+  useEffect(() => {
+    if (message === "" || localStorage.getItem(chatUid) === null) return
+    const timer = setTimeout(() => {
+      setMessage("")
+      localStorage.removeItem(chatUid)
+    }, fieldSenderMessageDuration)
+
+    return () => {
+      clearTimeout(timer)
+    }
+  }, [message, fieldSenderMessageDuration])
 
   if (chatUid === "") return <footer className="h-[70px]" />
 

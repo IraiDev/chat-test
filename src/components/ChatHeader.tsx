@@ -1,6 +1,10 @@
 import React from "react"
 import { RiMenuFoldLine } from "react-icons/ri"
 import { ChatAvatar } from "./ChatAvatar"
+import { TbPlugConnected } from "react-icons/tb"
+import { useChatContext } from "../store/ChatStore"
+import { SERVER_CHANNELS } from "../utils/constants"
+import { SocketError } from "../utils/types"
 
 interface Props {
   chatName: string
@@ -19,6 +23,7 @@ export const ChatHeader = ({ chatName, showGroup, isGroupOpen }: Props) => {
       <h1 className="font-bold text-xl first-letter:uppercase max-w-[220px] sm:max-w-[280px] truncate">
         {chatName}
       </h1>
+      <ConnectionBtn />
     </header>
   )
 }
@@ -39,6 +44,33 @@ const TogglerBtn = ({
           ${idGroupOpen ? "" : "rotate-180"} 
           `}
       />
+    </button>
+  )
+}
+
+const ConnectionBtn = () => {
+  const { isConnected, connection, loggedUser, setIsConnected } = useChatContext()
+
+  const handleSignIn = () => {
+    if (connection == null || loggedUser === null) return
+    connection.emit(
+      SERVER_CHANNELS.login,
+      loggedUser.token,
+      ({ ok, message }: SocketError) => {
+        console.log({ ok, message })
+        setIsConnected(ok)
+      }
+    )
+  }
+
+  if (isConnected) return null
+  return (
+    <button
+      onClick={handleSignIn}
+      className="bg-green-500 hover:bg-green-600 text-neutral-50 rounded-full py-0.5 px-2 text-sm transition-colors duration-200 flex items-center gap-2"
+    >
+      conectarse
+      <TbPlugConnected />
     </button>
   )
 }

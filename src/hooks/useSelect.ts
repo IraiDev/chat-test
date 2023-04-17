@@ -1,5 +1,5 @@
-import { type ReactNode, useEffect, useRef, useState, type ChangeEvent } from "react"
-import { type SelectProps, type SelectOption } from "../utils/types"
+import { ReactNode, useEffect, useRef, useState, type ChangeEvent } from "react"
+import { SelectProps, type SelectOption } from "../utils/types"
 
 const INIT_SELECT_VALUE = { label: "ninguno", value: "" }
 function adaptedOptions(enableEmptyOption: boolean, options: SelectOption[]) {

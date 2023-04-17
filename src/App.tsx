@@ -1,7 +1,7 @@
 import React from "react"
 import { ChatBubble } from "./components/ChatBubble"
 import { useChatConnection } from "./hooks"
-import { type IUser } from "./models/user.model"
+import { IUser } from "./models/user.model"
 import { useDarkMode } from "./hooks/useDarkMode"
 
 function formatUsers(array: any[]): IUser[] {
@@ -26,7 +26,7 @@ const users = [
     nombre_completo: "IGNACIO ARRIAGADA",
     crea_grupo_chat: true,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImlhcnJpYWdhZGEiLCJ1c2VySWQiOiIyOTAiLCJlbnRlcnByaXNlSWQiOiIxIiwiaWF0IjoxNjgwNTM3NzUwfQ.oryFS6JMdh2FE8iMKzFUyb5DleYofp67Fzqo24dOn-o",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImlhcnJpYWdhZGEiLCJ1c2VySWQiOiIyOTAiLCJlbnRlcnByaXNlSWQiOiIxIiwiY2FuQ3JlYXRlR3JvdXBzIjp0cnVlLCJpYXQiOjE2ODE1MDU1MTV9.5GoOE8At27NcJHiaY1wPb51PE1AmN0wDFyeyLFGlJLA",
   },
   {
     value: "62",
@@ -45,6 +45,8 @@ const users = [
     label: "sacuna",
     nombre_completo: "SEBASTIAN ACUÑA",
     crea_grupo_chat: false,
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNhY3VuYSIsInVzZXJJZCI6IjIxMyIsImVudGVycHJpc2VJZCI6IjEiLCJjYW5DcmVhdGVHcm91cHMiOmZhbHNlLCJpYXQiOjE2ODE1MDgyNjB9.vZ8UqweDtiTAXa6r4FK9TBJtT7ja8N9j4we9DB77SQs",
   },
   {
     value: "221",

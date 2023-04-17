@@ -1,6 +1,6 @@
 import React from "react"
 import { useTransition, animated } from "@react-spring/web"
-import { type ModalProps } from "./Modal"
+import { ModalProps } from "./Modal"
 
 type Props = Pick<ModalProps, "children" | "isOpen">
 
@@ -18,7 +18,7 @@ export function Backdrop({ children, isOpen }: Props) {
           style={style}
           className="
           h-screen w-full grid place-content-center fixed inset-0
-          bg-neutral-900/30 dark:bg-neutral-900/80
+          bg-neutral-900/30 dark:bg-neutral-900/80 z-[9999]
         "
         >
           {children}

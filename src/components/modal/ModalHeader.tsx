@@ -1,6 +1,6 @@
 import React from "react"
 import { TbX } from "react-icons/tb"
-import { type ModalProps } from "./Modal"
+import { ModalProps } from "./Modal"
 
 type Props = Pick<ModalProps, "hideCloseBtn" | "onClose" | "title">
 
