@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 import { io } from "socket.io-client"
 import { useChatContext } from "../store/ChatStore"
 import { SERVER_CHANNELS } from "../utils/constants"
@@ -28,10 +28,10 @@ export function useChatConnection(props: Partial<Props> = {}) {
     throw new Error("debe proveer un arreglo de usuarios con al menos un usuario")
   }
 
-  const signOut = () => {
+  const signOut = useCallback(() => {
     logout()
     connection?.disconnect()
-  }
+  }, [connection, logout])
 
   useEffect(() => {
     if (props?.url === undefined || props?.users === undefined) return

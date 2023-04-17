@@ -18,7 +18,7 @@ export const Message = ({ content, date, user, sendedByMe }: Props) => {
       ${
         sendedByMe
           ? "bg-emerald-700 self-end text-white"
-          : "bg-emerald-100 dark:bg-neutral-800 border-b dark:border-none"
+          : "bg-emerald-100 dark:bg-neutral-800"
       }
     `}
     >
