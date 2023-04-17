@@ -4,6 +4,7 @@ import { ChatEditor } from "./ChatEditor"
 import { ChatDeleter } from "./ChatDeleter"
 import { IChat } from "../models/chat.model"
 import { useChatContext } from "../store/ChatStore"
+import { ChatMembers } from "./ChatMembers"
 
 interface ItemProps {
   chat: IChat
@@ -29,13 +30,14 @@ export const GroupItem = ({ onClick, isActive, chat }: ItemProps) => {
     `}
     >
       <ChatAvatar />
-      <span
+      <div
         onClick={onClick}
-        className="block w-[60%] truncate cursor-pointer py-1"
+        className="flex flex-col cursor-pointer py-1 w-[56%]"
         title={`${chat.name} | ${chat.description}`}
       >
-        {chat.name}
-      </span>
+        <span className="w-full truncate">{chat.name}</span>
+        <ChatMembers members={chat.users} creatorId={chat.creatorUserId} />
+      </div>
       <Notify hidden={chat.notReadedMessages === 0}>{notReadedMessagesNormalized}</Notify>
       <div className="flex-1" />
       {loggedUser?.cantCreateGroup && (

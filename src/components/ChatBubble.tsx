@@ -53,7 +53,8 @@ export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
     >
       <ChatHeader
         isGroupOpen={isGroupOpen}
-        chatName={selectedChat?.name ?? defaultChatName}
+        defaulChatName={defaultChatName}
+        chat={selectedChat}
         showGroup={handleOpenGroup}
       />
       <Groups

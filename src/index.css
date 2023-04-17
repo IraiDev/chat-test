@@ -4,6 +4,9 @@
 
 @layer components {
   .scroll-app {
-     @apply overflow-auto scrollbar-thin scrollbar-thumb-rounded dark:scrollbar-thumb-neutral-600 scrollbar-thumb-neutral-400 scrollbar-track-transparent;
+    @apply overflow-auto scrollbar-thin scrollbar-thumb-rounded dark:scrollbar-thumb-neutral-600 scrollbar-thumb-neutral-400 scrollbar-track-transparent;
+  }
+  .scroll-app-xs {
+    @apply overflow-auto scrollbar-thin scrollbar-thumb-rounded scrollbar-thumb-transparent scrollbar-track-transparent;
   }
 }

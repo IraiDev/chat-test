@@ -5,14 +5,17 @@ import { TbPlugConnected } from "react-icons/tb"
 import { useChatContext } from "../store/ChatStore"
 import { SERVER_CHANNELS } from "../utils/constants"
 import { SocketError } from "../utils/types"
+import { IChat } from "../models/chat.model"
+import { ChatMembers } from "./ChatMembers"
 
 interface Props {
-  chatName: string
+  chat: IChat | null
+  defaulChatName: string
   isGroupOpen: boolean
   showGroup: () => void
 }
 
-export const ChatHeader = ({ chatName, showGroup, isGroupOpen }: Props) => {
+export const ChatHeader = ({ chat, showGroup, isGroupOpen, defaulChatName }: Props) => {
   return (
     <header
       className="px-2 py-6 bg-neutral-50 dark:bg-neutral-800 flex shadow-md
@@ -20,9 +23,12 @@ export const ChatHeader = ({ chatName, showGroup, isGroupOpen }: Props) => {
     >
       <TogglerBtn isGroupOpen={isGroupOpen} showGroup={showGroup} />
       <ChatAvatar />
-      <h1 className="font-bold text-xl first-letter:uppercase max-w-[220px] sm:max-w-[280px] truncate">
-        {chatName}
-      </h1>
+      <div className="flex flex-col max-w-[220px] sm:max-w-[280px]">
+        <h1 className="font-bold text-xl first-letter:uppercase w-full truncate">
+          {chat?.name ?? defaulChatName}
+        </h1>
+        <ChatMembers members={chat?.users ?? []} creatorId={chat?.creatorUserId ?? 0} />
+      </div>
       <ConnectionBtn />
     </header>
   )
