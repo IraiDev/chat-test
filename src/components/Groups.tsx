@@ -44,7 +44,7 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
       item && (
         <animated.div
           style={style}
-          className="absolute top-0 h-full w-2/3 border-r pt-24 pb-4
+          className="absolute top-0 h-full w-[250px] border-r pt-24 pb-4
           z-10 bg-neutral-50 dark:bg-neutral-800 border-neutral-300
           dark:border-neutral-600 shadow-md"
         >
@@ -55,7 +55,7 @@ export const Groups = ({ isOpen, chats, onSelectChat, onClose }: Props) => {
           <section>
             <ul
               className="divide-y divide-neutral-300 dark:divide-neutral-600 
-              max-h-[calc(100%-(6rem+28px))] scroll-app"
+              max-h-[420px] sm:max-h-[520px] scroll-app"
             >
               {chats.map((chat) => (
                 <GroupItem

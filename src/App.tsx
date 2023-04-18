@@ -53,6 +53,8 @@ const users = [
     label: "TBONGARDT",
     nombre_completo: "TOMAS BONGARDT",
     crea_grupo_chat: false,
+    token:
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6IlRCT05HQVJEVCIsInVzZXJJZCI6IjIyMSIsImVudGVycHJpc2VJZCI6IjEiLCJjYW5DcmVhdGVHcm91cHMiOnRydWUsImlhdCI6MTY4MTg0NDAzOX0.acN-X6wzSkJdP56NKOSloLrDGDU0DEX7xLJlAZi9LY0",
   },
 ]
 
@@ -78,7 +80,7 @@ export const USERS: IUser[] = formatUsers(users)
 const App = () => {
   const { handleToggleDarkMode, isDarkModeActive } = useDarkMode()
   const { signIn, loggedUser, signOut } = useChatConnection({
-    url: "https://chat.zpruebas.cl",
+    url: "https://chat.zproduccion.cl",
     users: USERS,
   })
 

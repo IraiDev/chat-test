@@ -4,7 +4,7 @@ import { Backdrop } from "./Backdrop"
 import { ModalWrapper } from "./ModalWrapper"
 import { ModalHeader } from "./ModalHeader"
 
-const MODAL_ROOT = document.getElementById("modal-root")
+const MODAL_ROOT = document.getElementById("chat-modal-root")
 // const WIDTH_SIZE = {
 //   xs: "max-w-xs",
 //   sm: "max-w-sm",

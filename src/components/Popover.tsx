@@ -15,7 +15,7 @@ export const Popover = ({ btnComponent, children, isOpen }: Props) => {
   })
 
   return (
-    <div className="fixed bottom-5 left-5 z-[50]">
+    <div className="fixed bottom-3 left-3 z-[50]">
       <>{btnComponent}</>
       {transition(
         (style, item) =>

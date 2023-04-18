@@ -8,7 +8,7 @@ type Props = Pick<
 >
 
 export function useMultiSelect({
-  findBy,
+  findBy = "label",
   options,
   value = [],
   name,
@@ -49,14 +49,19 @@ export function useMultiSelect({
 
   const handleFindInOptions = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value
-    const notSelectedOptions = options.filter((opt) =>
-      [...value, ...selectValue].includes(opt.value)
+    const notSelectedOptions = options.filter(
+      (opt) => !uniq([...value, ...selectValue]).includes(opt.value)
     )
+    console.log({ notSelectedOptions }, "primera")
     setInputValue(inputValue)
     if (findBy === "label") {
+      console.log({ inputValue, notSelectedOptions })
       setOptionsState(
         notSelectedOptions.filter((option) =>
-          option.label.toLocaleLowerCase().includes(inputValue.toLocaleLowerCase().trim())
+          option.label
+            .toLocaleLowerCase()
+            .trim()
+            .includes(inputValue.toLocaleLowerCase().trim())
         )
       )
       return
