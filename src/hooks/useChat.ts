@@ -25,7 +25,7 @@ export function useChat({ hidden }: Props) {
   const prevSelectedChat = useRef<IChat | null>(selectedChat)
 
   const showChatBubble = useMemo(() => {
-    return loggedUser !== null && usersList.length > 0 && connection !== null && !hidden
+    return loggedUser !== null && connection !== null && !hidden
   }, [loggedUser, usersList, connection])
 
   const notReadedMessages: NotReadedMessagesProps = useMemo(() => {
