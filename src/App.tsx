@@ -26,7 +26,7 @@ const users = [
     nombre_completo: "IGNACIO ARRIAGADA",
     crea_grupo_chat: true,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImlhcnJpYWdhZGEiLCJ1c2VySWQiOiIyOTAiLCJlbnRlcnByaXNlSWQiOiIxIiwiY2FuQ3JlYXRlR3JvdXBzIjp0cnVlLCJpYXQiOjE2ODE1MDU1MTV9.5GoOE8At27NcJHiaY1wPb51PE1AmN0wDFyeyLFGlJLA",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImlhcnJpYWdhZGEiLCJ1c2VySWQiOiIyOTAiLCJlbnRlcnByaXNlSWQiOiIxIiwiY2FuQ3JlYXRlR3JvdXBzIjp0cnVlLCJpYXQiOjE2ODIxMTA0ODl9.Z_N_sooYdHEw7tny0Ihwti3OC9-nSffaTXBmSiIaLNE",
   },
   {
     value: "62",
@@ -44,7 +44,7 @@ const users = [
     value: "213",
     label: "sacuna",
     nombre_completo: "SEBASTIAN ACUÑA",
-    crea_grupo_chat: false,
+    crea_grupo_chat: true,
     token:
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNhY3VuYSIsInVzZXJJZCI6IjIxMyIsImVudGVycHJpc2VJZCI6IjEiLCJjYW5DcmVhdGVHcm91cHMiOmZhbHNlLCJpYXQiOjE2ODE1MDgyNjB9.vZ8UqweDtiTAXa6r4FK9TBJtT7ja8N9j4we9DB77SQs",
   },
@@ -80,16 +80,13 @@ export const USERS: IUser[] = formatUsers(users)
 const App = () => {
   const { handleToggleDarkMode, isDarkModeActive } = useDarkMode()
   const { signIn, loggedUser, signOut } = useChatConnection({
-    url: "https://chat.zproduccion.cl",
+    url: "https://chat.zpruebas.cl",
     users: USERS,
   })
 
   return (
-    <main
-      className="min-h-screen w-full grid place-content-center bg-neutral-200 
-      dark:bg-neutral-900 text-neutral-800 dark:text-neutral-50"
-    >
-      <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg shadow-lg">
+    <main className="grid w-full min-h-screen place-content-center bg-neutral-200 dark:bg-neutral-900 text-neutral-800 dark:text-neutral-50">
+      <div className="p-4 rounded-lg shadow-lg bg-neutral-50 dark:bg-neutral-800">
         <ul className="space-y-2">
           {USERS.map((user) => (
             <li
