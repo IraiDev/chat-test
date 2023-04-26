@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react"
 import { io } from "socket.io-client"
 import { useChatContext } from "../store/ChatStore"
-import { SERVER_CHANNELS } from "../utils/constants"
+import { SERVER_CHANNELS, EXIST_CHAT_ROOT, EXIST_MODAL_ROOT } from "../utils/constants"
 import { IUser } from "../models/user.model"
 import { SocketError } from "../utils/types"
 
@@ -30,6 +30,8 @@ export function useChatConnection(props: Props = {}) {
   }, [connection, logout])
 
   useEffect(() => {
+    if (!EXIST_CHAT_ROOT || !EXIST_MODAL_ROOT) return
+
     if (loggedUser === null) {
       if (connection === null) return
       connection.disconnect()

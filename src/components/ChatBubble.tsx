@@ -8,9 +8,7 @@ import { MessageSender } from "./MessageSender"
 import { Groups } from "./Groups"
 import { useChat } from "../hooks/useChat"
 import { NotReadedMessagesProps } from "../models/chat.model"
-
-const CHAT_BUBBLE_ROOT = document.getElementById("chat-bubble-root")
-const CHAT_MODAL_ROOT = document.getElementById("chat-modal-root")
+import { CHAT_BUBBLE_ROOT, EXIST_CHAT_ROOT, EXIST_MODAL_ROOT } from "../utils/constants"
 
 interface BtnProps {
   notReadedMessages: NotReadedMessagesProps
@@ -22,7 +20,7 @@ interface Props {
   defaultChatName?: string
 }
 
-export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
+export const ChatBubble = ({ defaultChatName = "Chat", hidden = false }: Props) => {
   const {
     selectedChat,
     messages,
@@ -37,16 +35,18 @@ export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
     setIsGroupOpen,
   } = useChat({ hidden })
 
-  if (CHAT_BUBBLE_ROOT === null) {
-    throw new Error(
+  if (!EXIST_CHAT_ROOT) {
+    console.warn(
       'Es obligatorio crear una entrada para el portal de renderizado del chat con el nombre "chat-bubble-root"'
     )
+    return null
   }
 
-  if (CHAT_MODAL_ROOT === null) {
-    throw new Error(
+  if (!EXIST_MODAL_ROOT) {
+    console.warn(
       'Es obligatorio crear una entrada para el portal de renderizado del modal con el nombre "chat-modal-root"'
     )
+    return null
   }
 
   if (!showChatBubble || hidden) return null
@@ -73,7 +73,7 @@ export const ChatBubble = ({ defaultChatName = "Chat", hidden }: Props) => {
       <MessageWrapper messages={messages} />
       <MessageSender chatUid={selectedChat?.uid ?? ""} />
     </Popover>,
-    CHAT_BUBBLE_ROOT
+    CHAT_BUBBLE_ROOT!
   )
 }
 
@@ -81,15 +81,11 @@ const ChatButton = ({ onClick, notReadedMessages }: BtnProps) => {
   return (
     <button
       onClick={onClick}
-      className="h-11 w-11 grid place-content-center rounded-full bg-emerald-500 
-      hover:bg-emerald-600 text-white transition-colors duration-200 relative"
+      className="relative grid text-white transition-colors duration-200 rounded-full h-11 w-11 place-content-center bg-emerald-500 hover:bg-emerald-600"
     >
       <AiOutlineMessage className="text-2xl" />
       {notReadedMessages.total > 0 && (
-        <span
-          className="absolute -top-1 -right-1 bg-red-500 rounded-full h-5 w-5 grid 
-          place-content-center text-xs animate-bounce"
-        >
+        <span className="absolute grid w-5 h-5 text-xs bg-red-500 rounded-full -top-1 -right-1 place-content-center animate-bounce">
           {notReadedMessages.normalized}
         </span>
       )}

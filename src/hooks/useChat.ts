@@ -1,5 +1,10 @@
-import { useEffect, useMemo, useState, useRef } from "react"
-import { CLIENT_CHANNELS, SERVER_CHANNELS } from "../utils/constants"
+import { useEffect, useMemo, useState, useRef, useLayoutEffect } from "react"
+import {
+  CLIENT_CHANNELS,
+  SERVER_CHANNELS,
+  EXIST_CHAT_ROOT,
+  EXIST_MODAL_ROOT,
+} from "../utils/constants"
 import { useChatContext } from "../store/ChatStore"
 import {
   NotReadedMessagesProps,
@@ -9,6 +14,8 @@ import {
   ChatDisconnected,
 } from "../models/chat.model"
 import { SocketError } from "../utils/types"
+import { generarNotificacion } from "../utils/functions"
+import { useBrowserVisible } from "./useBrowserVisible"
 
 interface Props {
   hidden?: boolean
@@ -17,6 +24,7 @@ interface Props {
 export function useChat({ hidden }: Props) {
   const { connection, loggedUser, usersList, isConnected, setIsConnected } =
     useChatContext()
+  const isBrowserVisible = useBrowserVisible()
   const [chats, setChats] = useState<IChat[]>([])
   const [selectedChat, setSelectedChat] = useState<IChat | null>(null)
   const [messages, setMessages] = useState<IMessage[]>([])
@@ -25,7 +33,13 @@ export function useChat({ hidden }: Props) {
   const prevSelectedChat = useRef<IChat | null>(selectedChat)
 
   const showChatBubble = useMemo(() => {
-    return loggedUser !== null && connection !== null && !hidden
+    return (
+      loggedUser !== null &&
+      connection !== null &&
+      !hidden &&
+      EXIST_CHAT_ROOT &&
+      EXIST_MODAL_ROOT
+    )
   }, [loggedUser, usersList, connection])
 
   const notReadedMessages: NotReadedMessagesProps = useMemo(() => {
@@ -99,6 +113,19 @@ export function useChat({ hidden }: Props) {
     )
   }
 
+  useLayoutEffect(() => {
+    if (connection === null || loggedUser === null) return
+    connection.emit(
+      isBrowserVisible && isChatOpen
+        ? SERVER_CHANNELS["join-room"]
+        : SERVER_CHANNELS["leave-room"],
+      { uidChat: selectedChat?.uid, token: loggedUser?.token },
+      (error: SocketError) => {
+        console.log(error)
+      }
+    )
+  }, [isBrowserVisible, isChatOpen])
+
   // ? efecto para almacenar la data de los chats/grupos
   useEffect(() => {
     if (!showChatBubble) return
@@ -137,11 +164,20 @@ export function useChat({ hidden }: Props) {
       CLIENT_CHANNELS["new-messages"],
       ({ notReadedMessages }: { notReadedMessages: NotReadedMessages }) => {
         const { quantity, uid } = notReadedMessages
+
         setChats((prevChats) =>
-          prevChats.map(({ notReadedMessages, ...item }) => ({
-            ...item,
-            notReadedMessages: uid === item.uid ? quantity : notReadedMessages,
-          }))
+          prevChats.map(({ notReadedMessages, ...item }) => {
+            uid === item.uid &&
+              generarNotificacion({
+                body: `Tiene ${quantity} mensajes no leidos`,
+                title: item.name,
+                tag: uid,
+              })
+            return {
+              ...item,
+              notReadedMessages: uid === item.uid ? quantity : notReadedMessages,
+            }
+          })
         )
       }
     )
