@@ -10,12 +10,14 @@ import { BsSendFill } from "react-icons/bs"
 import { SERVER_CHANNELS } from "../utils/constants"
 import { useChatContext } from "../store/ChatStore"
 import { SocketError } from "../utils/types"
+import { useMobile } from "../hooks/useMobile"
 
 interface Props {
   chatUid: string
 }
 
 export const MessageSender = ({ chatUid }: Props) => {
+  const { handleBlur, handleFocus } = useMobile()
   const { connection, loggedUser, fieldSenderMessageDuration, isConnected } =
     useChatContext()
   const [message, setMessage] = useState(localStorage.getItem(chatUid) ?? "")
@@ -83,8 +85,7 @@ export const MessageSender = ({ chatUid }: Props) => {
     <footer className="p-2">
       <form
         onSubmit={handleSubmit}
-        className="p-2 bg-neutral-50 dark:bg-neutral-800 rounded-xl flex items-center gap-2 shadow-md
-        border border-neutral-300 dark:border-neutral-600"
+        className="flex items-center gap-2 p-2 border shadow-md bg-neutral-50 dark:bg-neutral-800 rounded-xl border-neutral-300 dark:border-neutral-600"
       >
         <textarea
           disabled={chatUid === "" || !isConnected}
@@ -92,6 +93,8 @@ export const MessageSender = ({ chatUid }: Props) => {
           autoComplete="off"
           rows={1}
           ref={textareaRef}
+          onFocus={handleFocus}
+          onBlur={handleBlur}
           value={message}
           onKeyDown={handleKeyDown}
           onChange={handleChangeValue}

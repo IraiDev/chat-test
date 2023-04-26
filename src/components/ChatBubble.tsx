@@ -81,15 +81,11 @@ const ChatButton = ({ onClick, notReadedMessages }: BtnProps) => {
   return (
     <button
       onClick={onClick}
-      className="h-11 w-11 grid place-content-center rounded-full bg-emerald-500 
-      hover:bg-emerald-600 text-white transition-colors duration-200 relative"
+      className="relative grid w-10 h-10 text-white transition-colors duration-200 rounded-full sm:w-11 sm:h-11 place-content-center bg-emerald-500 hover:bg-emerald-600"
     >
       <AiOutlineMessage className="text-2xl" />
       {notReadedMessages.total > 0 && (
-        <span
-          className="absolute -top-1 -right-1 bg-red-500 rounded-full h-5 w-5 grid 
-          place-content-center text-xs animate-bounce"
-        >
+        <span className="absolute grid w-5 h-5 text-xs bg-red-500 rounded-full -top-1 -right-1 place-content-center animate-bounce">
           {notReadedMessages.normalized}
         </span>
       )}

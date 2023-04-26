@@ -17,14 +17,11 @@ interface Props {
 
 export const ChatHeader = ({ chat, showGroup, isGroupOpen, defaulChatName }: Props) => {
   return (
-    <header
-      className="px-2 py-6 bg-neutral-50 dark:bg-neutral-800 flex shadow-md
-      items-center gap-2 z-50"
-    >
+    <header className="z-50 flex items-center gap-2 px-2 py-2 shadow-md sm:py-6 bg-neutral-50 dark:bg-neutral-800">
       <TogglerBtn isGroupOpen={isGroupOpen} showGroup={showGroup} />
       <ChatAvatar />
       <div className="flex flex-col max-w-[220px] sm:max-w-[280px]">
-        <h1 className="font-bold text-xl first-letter:uppercase w-full truncate">
+        <h1 className="w-full text-xl font-bold truncate first-letter:uppercase">
           {chat?.name ?? defaulChatName}
         </h1>
         <ChatMembers members={chat?.users ?? []} creatorId={chat?.creatorUserId ?? 0} />
@@ -43,8 +40,7 @@ const TogglerBtn = ({
     <button
       disabled={!isConnected}
       onClick={showGroup}
-      className="h-8 w-8 grid place-content-center text-xl rounded-full 
-      bg-transparent trnasition duration-200 hover:bg-neutral-200 dark:hover:bg-neutral-700 outline-none disabled:hover:bg-transparent dark:disabled:hover:bg-transparent"
+      className="flex items-center justify-center w-8 h-8 text-xl duration-200 bg-transparent rounded-full outline-none trnasition hover:bg-neutral-200 dark:hover:bg-neutral-700 disabled:hover:bg-transparent dark:disabled:hover:bg-transparent"
     >
       <RiMenuFoldLine
         className={`

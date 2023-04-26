@@ -22,5 +22,6 @@ module.exports = {
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/consistent-type-imports": "off",
     "@typescript-eslint/triple-slash-reference": "off",
+    "@typescript-eslint/no-confusing-void-expression": "off",
   },
 }
