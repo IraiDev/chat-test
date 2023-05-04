@@ -26,7 +26,7 @@ const users = [
     nombre_completo: "IGNACIO ARRIAGADA",
     crea_grupo_chat: true,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImlhcnJpYWdhZGEiLCJ1c2VySWQiOiIyOTAiLCJlbnRlcnByaXNlSWQiOiIxIiwiY2FuQ3JlYXRlR3JvdXBzIjp0cnVlLCJpYXQiOjE2ODIxMTA0ODl9.Z_N_sooYdHEw7tny0Ihwti3OC9-nSffaTXBmSiIaLNE",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnRlcnByaXNlSWQiOiIxIiwidXNlcklkIjoiMjkwIiwidXNlck5hbWUiOiJpYXJyaWFnYWRhIiwiY2FuQ3JlYXRlR3JvdXBzIjp0cnVlLCJpYXQiOjE2ODMyMTYwMzB9.UzQ3ZgwusSoWeTdYSVLPH-0Zufy7UeSie72A0SNSyrY",
   },
   {
     value: "62",
@@ -46,7 +46,7 @@ const users = [
     nombre_completo: "SEBASTIAN ACUÑA",
     crea_grupo_chat: true,
     token:
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6InNhY3VuYSIsInVzZXJJZCI6IjIxMyIsImVudGVycHJpc2VJZCI6IjEiLCJjYW5DcmVhdGVHcm91cHMiOmZhbHNlLCJpYXQiOjE2ODE1MDgyNjB9.vZ8UqweDtiTAXa6r4FK9TBJtT7ja8N9j4we9DB77SQs",
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbnRlcnByaXNlSWQiOiIxIiwidXNlcklkIjoiMjEzIiwidXNlck5hbWUiOiJzYWN1bmEiLCJjYW5DcmVhdGVHcm91cHMiOmZhbHNlLCJpYXQiOjE2ODMyMTYwOTV9.KpE7N7xYfFC18WSLxN5cQ6MCCj2EmzwPU26jGRay9NA",
   },
   {
     value: "221",
